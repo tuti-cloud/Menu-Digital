@@ -8,11 +8,5 @@ namespace Menu_Digital.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService; //no si la inyección correcta es user? supongo que si :)
-        public AuthController(IUserService userService)
-        {
-            _userService = userService;
-        }
-
     }
 }

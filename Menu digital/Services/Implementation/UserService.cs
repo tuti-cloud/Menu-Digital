@@ -1,6 +1,13 @@
-﻿namespace Menu_Digital.Services.Implementation
+﻿namespace Menu_Digital.Services.Implementation;
+
+using Menu_Digital.Repositories.Interfaces;
+using Menu_Digital.Services.Interfaces;
+
+public class UserService : IUserService
 {
-    public class UserService
+    private IUserRepository _userRepository;
+    public UserService(IUserRepository userRepository)
     {
+        _userRepository = userRepository;
     }
 }

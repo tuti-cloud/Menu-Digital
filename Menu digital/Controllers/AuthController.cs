@@ -7,5 +7,6 @@ namespace Menu_Digital.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+
     }
 }

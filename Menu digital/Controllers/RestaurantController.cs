@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Menu_Digital.Services.Interfaces;
 
 namespace Menu_Digital.Controllers
 {
@@ -7,5 +8,10 @@ namespace Menu_Digital.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
+        private IRestaurantService _restaurantService;
+        public RestaurantController(IRestaurantService restaurantService)
+        {
+            _restaurantService = restaurantService;
+        }
     }
 }

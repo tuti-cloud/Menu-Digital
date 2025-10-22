@@ -2,6 +2,6 @@
 using Menu_Digital.Repositories.Interfaces;
 
     public class RestaurantRepository : IRestaurantRepository
-{
+    {
     }
 

@@ -16,3 +16,10 @@ namespace Menu_Digital.Controllers
 
     }
 }
+
+// CategoriesController
+// [ApiController]
+// [Route("api/categories")]
+
+// GET /api/categories/restaurantId
+

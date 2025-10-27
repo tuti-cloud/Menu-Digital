@@ -59,5 +59,9 @@ public class RestaurantRepository : IRestaurantRepository
         }
     }
 
+    public void Update(Restaurant updatedRestaurant)
+    {
+        throw new NotImplementedException();
+    }
 }
 

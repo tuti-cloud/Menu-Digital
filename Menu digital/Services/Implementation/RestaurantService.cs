@@ -65,11 +65,34 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public RestaurantDto Update(int userId, CreateAndUpdateRestaurantDto restaurantDto)
+    public RestaurantDto Update(int restaurantId, CreateAndUpdateRestaurantDto restaurantDto)
     {
-        throw new NotImplementedException();
+        var restaurant = new Restaurant(
+            restaurantId,
+            restaurantDto.Name,
+            restaurantDto.Address,
+            restaurantDto.PhoneNumber,
+            restaurantDto.Email,
+            restaurantDto.Password
+        );
+
+
+        var updated = _restaurantRepository.Update(restaurant);
+        if (updated == null)
+        {
+            throw new Exception("Restaurant not found for update");
+        }
+
+        var updatedDto = new RestaurantDto
+        {
+            Name = updated.Name,
+            Address = updated.Address,
+            Email = updated.Email,
+            PhoneNumber = updated.PhoneNumber
+        };
+
+        return updatedDto;
     }
-}
 
       
     

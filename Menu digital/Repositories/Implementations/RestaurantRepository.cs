@@ -58,6 +58,4 @@ public class RestaurantRepository : IRestaurantRepository
             _context.SaveChanges();
         }
     }
-
 }
-

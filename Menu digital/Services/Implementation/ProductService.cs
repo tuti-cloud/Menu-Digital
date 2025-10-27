@@ -96,10 +96,10 @@ public class ProductService : IProductService
             product.Name = productDto.Name;
             product.Description = productDto.Description;
             product.Price = productDto.Price;
-            product.DiscountPercentage = productDto.DiscountPercentage; //porq toma dec en vez de int (?
+            product.DiscountPercentage = productDto.DiscountPercentage;
             product.HappyHour = productDto.HappyHour;
             product.IsRecommended = productDto.Favorite;
-            _productRepository.Update(product);
+            _productRepository.Update(product, productId);
             return new ProductDto
             {
                 Name = product.Name,

@@ -94,5 +94,5 @@ public class ProductRepository : IProductRepository
         // (Suele ser raro mover el restaurante, pero CategoryId es más común)
     }
 
-
+    
 }

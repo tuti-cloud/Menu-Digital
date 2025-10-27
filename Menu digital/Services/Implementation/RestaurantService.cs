@@ -1,5 +1,5 @@
 ﻿namespace Menu_Digital.Services.Implementation;
-
+using System;
 using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
@@ -81,28 +81,12 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public RestaurantDto Update(int restaurantId, CreateAndUpdateRestaurantDto restaurantDto)
+    public RestaurantDto Update(Restaurant updatedRestaurant)
     {
-        Restaurant? restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
-        if (restaurant is not null)
-        {
-            restaurant.Name = restaurantDto.Name;
-            restaurant.Address = restaurantDto.Address;
-            restaurant.PhoneNumber = restaurantDto.PhoneNumber;
-            restaurant.Email = restaurantDto.Email;
-            restaurant.Password = restaurantDto.Password;
-            _restaurantRepository.Update(restaurant);
-            return new RestaurantDto
-            {
-                Name = restaurant.Name,
-                Address = restaurant.Address,
-                Email = restaurant.Email,
-                PhoneNumber = restaurant.PhoneNumber,
-            };
-        }
-        else
-        {
-            throw new Exception("restaurant not found");
-        }
+        // recibis restaurantRquestdto, int restaurantid
+        // consultar get restaurant by id (restaurantid) => te deuvleve un restaurant entidad
+        // si no es null => asignarle todas las propiedeas del updatedrestauran a tu entidad restaurat
+        // update en el repositorio y le pasas el restaurant entidad
+        return _context.Restaurants.Update(updatedRestaurant);
     }
 }

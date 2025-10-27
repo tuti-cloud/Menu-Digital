@@ -7,7 +7,7 @@ namespace Menu_Digital.Repositories.Interfaces
         ICollection<Restaurant> GetAll();
         Restaurant? GetRestaurantById(int id);
         Restaurant Create(Restaurant restaurant);
-        void Update(Restaurant updatedRestaurant);
+        void Update(Restaurant updatedRestaurant, int productId);
         void Delete(int id);
         public Restaurant? GetByEmail(string email); //para autenticación
     }

@@ -9,7 +9,7 @@ namespace Menu_Digital.Repositories.Interfaces
         Category Create(Category category);
         void Update(Category category, int categoryId);
         void Delete(int id);
-        public IEnumerable<Category> GetByrestaurantId(int restaurantId); //obtener categorias por restaurante
+        public ICollection<Category> GetByrestaurantId(int restaurantId); //obtener categorias por restaurante
 
     }
 }

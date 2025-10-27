@@ -15,3 +15,10 @@ namespace Menu_Digital.Controllers
         }
     }
 }
+
+// RestaurantsController
+// [ApiController]
+// [Route("api/restaurants")]
+
+// GET /api/restaurants
+

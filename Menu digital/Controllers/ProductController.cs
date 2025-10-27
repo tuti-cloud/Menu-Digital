@@ -15,3 +15,9 @@ namespace Menu_Digital.Controllers
         }
     }
 }
+
+// ProductsController
+// [ApiController]
+// [Route("api/products")]
+
+// GET api/products/productId

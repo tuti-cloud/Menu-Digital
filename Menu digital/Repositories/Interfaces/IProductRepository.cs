@@ -9,10 +9,13 @@ namespace Menu_Digital.Repositories.Interfaces
         Product Create(Product product);
         void Update(Product product, int productId);
         void Delete(int id);
-        public IEnumerable<Product> GetByCategoryId(int categoryId); //obtener producto por categoria
-        public IEnumerable<Product> GetByrestaurantId(int restaurantId); //obtener productos por restaurante
-        public IEnumerable<Product> GetDiscountedProduct(int restauranteId); //obtener productos con descuento de un restaurante
-        public IEnumerable<Product> GetHaappyHourProduct(int restauranteId); //obtener productos en happy hour de un restaurante
+        public ICollection<Product> GetByCategoryId(int categoryId); //obtener producto por categoria
+        public ICollection<Product> GetByrestaurantId(int restaurantId); //obtener productos por restaurante
+        public ICollection<Product> GetDiscountedProduct(int restauranteId); //obtener productos con descuento de un restaurante
+        public ICollection<Product> GetHaappyHourProduct(int restauranteId); //obtener productos en happy hour de un restaurante
+        public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended); //obtener productos recomendados de un restaurante
 
     }
 }
+
+// var hasHappyHour = !product.HappyHour;

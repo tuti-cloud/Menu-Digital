@@ -25,7 +25,7 @@ namespace MenuDigital.Data
                 Address = "Paraguay 1950",
                 PhoneNumber = "1111111",
                 Email = "aaa@gmail.com",
-                PasswordHash = "1235"
+                Password = "1235"
             };
 
             modelBuilder.Entity<Restaurant>().HasData(

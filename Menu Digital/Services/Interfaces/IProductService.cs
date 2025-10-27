@@ -10,9 +10,9 @@ namespace Menu_Digital.Services.Interfaces
         ProductDto GetProductByIdForRestaurant(int restaurantId, int productId);
 
         ProductDto GetProductById(int id);
-        ProductDto Create(CreateProductRequest productDto);
-        ProductDto Update(int productId, CreateProductRequest productDto);
-        bool Delete(int productId);
+        ProductDto Create(CreateAndUpdateProductDto productDto);
+        ProductDto Update(int productId, CreateAndUpdateProductDto productDto);
+        public void Delete(int productId);
     }
 }
 

@@ -93,4 +93,6 @@ public class ProductRepository : IProductRepository
         // Claves Foráneas: Cambiar CategoryId y RestaurantId si el producto se mueve
         // (Suele ser raro mover el restaurante, pero CategoryId es más común)
     }
+
+
 }

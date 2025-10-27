@@ -4,10 +4,10 @@ namespace Menu_Digital.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        IEnumerable<Product> GetAll();
+        ICollection<Product> GetAll();
         Product? GetProductById(int id);
         Product Create(Product product);
-        void Update(Product product, int productId);
+        void Update(Product updatedProduct, int productId);
         void Delete(int id);
         public ICollection<Product> GetByCategoryId(int categoryId); //obtener producto por categoria
         public ICollection<Product> GetByrestaurantId(int restaurantId); //obtener productos por restaurante

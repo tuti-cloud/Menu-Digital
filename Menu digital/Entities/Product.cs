@@ -16,6 +16,6 @@ namespace Menu_Digital.Entities
         public int RestaurantId { get; set; }
         public int DiscountPercentage { get; set; } // null si no tiene descuento // 10, 20, 50
         public bool HappyHour { get; set; }
-        public bool Favorite { get; set; }
+        public bool IsRecommended { get; set; }
     }
 }

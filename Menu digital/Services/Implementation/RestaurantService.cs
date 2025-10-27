@@ -24,12 +24,28 @@ public class RestaurantService : IRestaurantService
 
     public RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto)
     {
-        throw new NotImplementedException();
+        Restaurant restaurant = new Restaurant()
+        {
+            Name = restaurantDto.Name,
+            Address = restaurantDto.Address,
+            PhoneNumber = restaurantDto.PhoneNumber,
+            Email = restaurantDto.Email,
+            Password = restaurantDto.Password,
+        };
+
+        var newRestaurant = _restaurantRepository.Create(restaurant);
+        return new RestaurantDto
+        {
+            Name = newRestaurant.Name,
+            Address = newRestaurant.Address,
+            Email = newRestaurant.Email,
+            PhoneNumber = newRestaurant.PhoneNumber,
+        };
     }
 
-    public bool Delete(int restaurantid)
+    public void Delete(int restaurantid)
     {
-        throw new NotImplementedException();
+        _restaurantRepository.Delete(restaurantid);
     }
 
     public List<RestaurantDto> GetAllRestaurants()
@@ -37,10 +53,10 @@ public class RestaurantService : IRestaurantService
         var restaurants = _restaurantRepository.GetAll()
       .Select(u => new RestaurantDto
       {
-        Name = u.Name,
-        Address = u.Address,
-        Email = u.Email,
-        PhoneNumber = u.PhoneNumber,
+          Name = u.Name,
+          Address = u.Address,
+          Email = u.Email,
+          PhoneNumber = u.PhoneNumber,
       })
       .ToList();
 
@@ -48,8 +64,8 @@ public class RestaurantService : IRestaurantService
     }
 
     public RestaurantDto GetByRestaurantId(int restaurantId)
-    { 
-    
+    {
+
         var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
         if (restaurant == null)
         {
@@ -65,13 +81,28 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public RestaurantDto Update(int userId, CreateAndUpdateRestaurantDto restaurantDto)
+    public RestaurantDto Update(int restaurantId, CreateAndUpdateRestaurantDto restaurantDto)
     {
-        throw new NotImplementedException();
+        Restaurant? restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+        if (restaurant is not null)
+        {
+            restaurant.Name = restaurantDto.Name;
+            restaurant.Address = restaurantDto.Address;
+            restaurant.PhoneNumber = restaurantDto.PhoneNumber;
+            restaurant.Email = restaurantDto.Email;
+            restaurant.Password = restaurantDto.Password;
+            _restaurantRepository.Update(restaurant);
+            return new RestaurantDto
+            {
+                Name = restaurant.Name,
+                Address = restaurant.Address,
+                Email = restaurant.Email,
+                PhoneNumber = restaurant.PhoneNumber,
+            };
+        }
+        else
+        {
+            throw new Exception("restaurant not found");
+        }
     }
 }
-
-      
-    
-
-

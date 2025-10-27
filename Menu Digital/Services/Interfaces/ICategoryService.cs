@@ -9,7 +9,7 @@ namespace Menu_Digital.Services.Interfaces
         CategoryDto GetCategoryById(int id);
         CategoryDto Create(CreateAndUpdateCategoryRequest request);
         CategoryDto Update(int categoryId, CreateAndUpdateCategoryRequest categoryDto);
-        bool Delete(int categoryId);
+        public void Delete(int categoryId);
 
     }
 }

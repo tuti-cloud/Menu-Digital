@@ -6,6 +6,7 @@ namespace Menu_Digital.Services.Interfaces
 {
     public interface IRestaurantService
     {
+
         public Restaurant? Authenticate(string Email, string password);
         List<Restaurant> GetAllRestaurants();
         RestaurantDto GetRestaurantById(int id);

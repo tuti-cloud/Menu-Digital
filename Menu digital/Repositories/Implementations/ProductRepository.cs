@@ -46,7 +46,32 @@ public class ProductRepository : IProductRepository
         throw new NotImplementedException();
     }
 
+    public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Update(Product product, int productId)
+    {
+        throw new NotImplementedException();
+    }
+
+    ICollection<Product> IProductRepository.GetByCategoryId(int categoryId)
+    {
+        throw new NotImplementedException();
+    }
+
+    ICollection<Product> IProductRepository.GetByrestaurantId(int restaurantId)
+    {
+        throw new NotImplementedException();
+    }
+
+    ICollection<Product> IProductRepository.GetDiscountedProduct(int restauranteId)
+    {
+        throw new NotImplementedException();
+    }
+
+    ICollection<Product> IProductRepository.GetHaappyHourProduct(int restauranteId)
     {
         throw new NotImplementedException();
     }

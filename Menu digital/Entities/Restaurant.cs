@@ -5,6 +5,18 @@ namespace Menu_Digital.Entities
 {
     public class Restaurant
     {
+        private int restaurantId;
+
+        public Restaurant(int restaurantId, string name, string address, string phoneNumber, string email, string password)
+        {
+            this.restaurantId = restaurantId;
+            Name = name;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            Password = password;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

@@ -35,6 +35,11 @@ public class CategoryRepository : ICategoryRepository
     {
         throw new NotImplementedException();
     }
+
+    ICollection<Category> ICategoryRepository.GetByrestaurantId(int restaurantId)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

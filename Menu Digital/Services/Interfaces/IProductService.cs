@@ -7,6 +7,8 @@ namespace Menu_Digital.Services.Interfaces
     public interface IProductService
     {
         List<ProductDto> GetAllProducts();
+        ProductDto GetProductByIdForRestaurant(int restaurantId, int productId);
+
         ProductDto GetProductById(int id);
         ProductDto Create(CreateProductRequest productDto);
         ProductDto Update(int productId, CreateProductRequest productDto);

@@ -81,12 +81,30 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public RestaurantDto Update(Restaurant updatedRestaurant)
+    public RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId)
     {
-        // recibis restaurantRquestdto, int restaurantid
-        // consultar get restaurant by id (restaurantid) => te deuvleve un restaurant entidad
-        // si no es null => asignarle todas las propiedeas del updatedrestauran a tu entidad restaurat
-        // update en el repositorio y le pasas el restaurant entidad
-        return _context.Restaurants.Update(updatedRestaurant);
+        // Convertir DTO → Entidad
+        var updatedRestaurant = new Restaurant
+        {
+            Name = updatedRestaurantDto.Name,
+            Address = updatedRestaurantDto.Address,
+            PhoneNumber = updatedRestaurantDto.PhoneNumber,
+            Email = updatedRestaurantDto.Email,
+            Password = updatedRestaurantDto.Password
+        };
+
+        _restaurantRepository.Update(updatedRestaurant, restaurantId);
+
+        // Obtener la entidad actualizada (opcional si el repo la devuelve)
+        var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+
+        // Convertir Entidad → DTO
+        return new RestaurantDto
+        {
+            Name = restaurant.Name,
+            Address = restaurant.Address,
+            PhoneNumber = restaurant.PhoneNumber,
+            Email = restaurant.Email
+        };
     }
 }

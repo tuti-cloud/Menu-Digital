@@ -9,7 +9,7 @@ namespace Menu_Digital.Services.Interfaces
         List<ProductDto> GetAllProducts();
         ProductDto GetProductById(int id);
         ProductDto Create(CreateAndUpdateProductDto productDto);
-        ProductDto Update(int productId, CreateAndUpdateProductDto productDto);
+        ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId);
         public void Delete(int productId);
     }
 }

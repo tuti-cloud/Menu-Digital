@@ -88,19 +88,23 @@ public class ProductService : IProductService
         };
     }
 
-    public ProductDto Update(int productId, CreateAndUpdateProductDto productDto)
+    public ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId)
     {
-        Product? product = _productRepository.GetProductById(productId);
-        if (product is not null)
+        var updatedProduct = new Product
         {
-            product.Name = productDto.Name;
-            product.Description = productDto.Description;
-            product.Price = productDto.Price;
-            product.DiscountPercentage = productDto.DiscountPercentage;
-            product.HappyHour = productDto.HappyHour;
-            product.IsRecommended = productDto.Favorite;
-            _productRepository.Update(product, productId);
-            return new ProductDto
+            Name = updatedProductDto.Name,
+            Description = updatedProductDto.Description,
+            Price = updatedProductDto.Price,
+            DiscountPercentage = updatedProductDto.DiscountPercentage,
+            HappyHour = updatedProductDto.HappyHour,
+            IsRecommended = updatedProductDto.Favorite,
+         };
+
+        _productRepository.Update(updatedProduct, productId);
+
+        var product = _productRepository.GetProductById(productId);
+
+        return new ProductDto
             {
                 Name = product.Name,
                 Description = product.Description,
@@ -110,11 +114,7 @@ public class ProductService : IProductService
                 IsRecommended = product.IsRecommended,
            
             };
-        }
-        else
-        {
-            throw new Exception("restaurant not found");
-        }
+        
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿namespace Menu_Digital.Services.Implementation;
-
+using System;
 using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
@@ -81,28 +81,30 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public RestaurantDto Update(int restaurantId, CreateAndUpdateRestaurantDto restaurantDto)
+    public RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId)
     {
-        Restaurant? restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
-        if (restaurant is not null)
+        // Convertir DTO → Entidad
+        var updatedRestaurant = new Restaurant
         {
-            restaurant.Name = restaurantDto.Name;
-            restaurant.Address = restaurantDto.Address;
-            restaurant.PhoneNumber = restaurantDto.PhoneNumber;
-            restaurant.Email = restaurantDto.Email;
-            restaurant.Password = restaurantDto.Password;
-            _restaurantRepository.Update(restaurant);
-            return new RestaurantDto
-            {
-                Name = restaurant.Name,
-                Address = restaurant.Address,
-                Email = restaurant.Email,
-                PhoneNumber = restaurant.PhoneNumber,
-            };
-        }
-        else
+            Name = updatedRestaurantDto.Name,
+            Address = updatedRestaurantDto.Address,
+            PhoneNumber = updatedRestaurantDto.PhoneNumber,
+            Email = updatedRestaurantDto.Email,
+            Password = updatedRestaurantDto.Password
+        };
+
+        _restaurantRepository.Update(updatedRestaurant, restaurantId);
+
+        // Obtener la entidad actualizada (opcional si el repo la devuelve)
+        var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+
+        // Convertir Entidad → DTO
+        return new RestaurantDto
         {
-            throw new Exception("restaurant not found");
-        }
+            Name = restaurant.Name,
+            Address = restaurant.Address,
+            PhoneNumber = restaurant.PhoneNumber,
+            Email = restaurant.Email
+        };
     }
 }

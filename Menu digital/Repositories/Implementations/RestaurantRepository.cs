@@ -58,10 +58,4 @@ public class RestaurantRepository : IRestaurantRepository
             _context.SaveChanges();
         }
     }
-
-    public void Update(Restaurant updatedRestaurant)
-    {
-        throw new NotImplementedException();
-    }
 }
-

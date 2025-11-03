@@ -94,23 +94,5 @@ public class ProductRepository : IProductRepository
         // (Suele ser raro mover el restaurante, pero CategoryId es más común)
     }
 
-    ICollection<Product> IProductRepository.GetByCategoryId(int categoryId)
-    {
-        throw new NotImplementedException();
-    }
 
-    ICollection<Product> IProductRepository.GetByrestaurantId(int restaurantId)
-    {
-        throw new NotImplementedException();
-    }
-
-    ICollection<Product> IProductRepository.GetDiscountedProduct(int restauranteId)
-    {
-        throw new NotImplementedException();
-    }
-
-    ICollection<Product> IProductRepository.GetHaappyHourProduct(int restauranteId)
-    {
-        throw new NotImplementedException();
-    }
 }

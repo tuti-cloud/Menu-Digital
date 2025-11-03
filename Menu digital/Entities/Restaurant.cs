@@ -7,15 +7,15 @@ namespace Menu_Digital.Entities
     {
         private int restaurantId;
 
-        public Restaurant(int restaurantId, string name, string address, string phoneNumber, string email, string password)
-        {
-            this.restaurantId = restaurantId;
-            Name = name;
-            Address = address;
-            PhoneNumber = phoneNumber;
-            Email = email;
-            Password = password;
-        }
+        //public Restaurant(int restaurantId, string name, string address, string phoneNumber, string email, string password)
+        //{
+        //    this.restaurantId = restaurantId;
+        //    Name = name;
+        //    Address = address;
+        //    PhoneNumber = phoneNumber;
+        //    Email = email;
+        //    Password = password;
+        //}
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

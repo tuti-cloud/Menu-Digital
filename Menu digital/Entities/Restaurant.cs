@@ -5,7 +5,7 @@ namespace Menu_Digital.Entities
 {
     public class Restaurant
     {
-        private int restaurantId;
+       
 
         //public Restaurant(int restaurantId, string name, string address, string phoneNumber, string email, string password)
         //{
@@ -19,8 +19,8 @@ namespace Menu_Digital.Entities
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int RestaurantId { get; set; }
+        public string RestaurantName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }

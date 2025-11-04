@@ -3,6 +3,7 @@
     public class CategoryDto
     {
         public string Name { get; set; }
-        public string RestaurantName { get; set; }
+        public int RestaurantId { get; set; }
+        public List<int> ProductIds { get; set; } = new();
     }
 }

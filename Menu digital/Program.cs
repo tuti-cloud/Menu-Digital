@@ -62,7 +62,7 @@ builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryServicec>();
+builder.Services.AddScoped<ICategoryService,CategoryService>();
 
 
 builder.Services.AddDbContext < MenuDigitalContext > (dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:MenuDigitalDBConnectionString"]));

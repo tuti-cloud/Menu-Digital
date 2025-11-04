@@ -88,6 +88,11 @@ public class ProductService : IProductService
         };
     }
 
+    public ProductDto GetProductByIdForRestaurant(int restaurantId, int productId)
+    {
+        throw new NotImplementedException();
+    }
+
     public ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId)
     {
         var updatedProduct = new Product

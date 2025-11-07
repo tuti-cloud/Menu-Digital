@@ -7,18 +7,39 @@ using Menu_Digital.Repositories.Implementations;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
-public class CategoryServicec : ICategoryService
+public class CategoryService : ICategoryService
 {
     private ICategoryRepository _categoryRepository;
-    public CategoryServicec(ICategoryRepository categoryRepository)
+
+    public CategoryService(ICategoryRepository categoryRepository)
     {
         _categoryRepository = categoryRepository;
     }
 
     public CategoryDto Create(CreateAndUpdateCategoryDto request)
     {
-        throw new NotImplementedException();
+       
+        var category = new Category
+        {
+            Name = request.Name,
+            RestaurantId = request.RestaurantId
+        };
+
+      
+        var created = _categoryRepository.Create(category);
+
+        
+        var createdDto = new CategoryDto
+        {
+            
+            Name = created.Name,
+            RestaurantId = created.RestaurantId,
+            ProductIds = new List<int>() // por ahora no se asignan productos desde aquí
+        };
+
+        return createdDto;
     }
 
     public void Delete(int categoryId)
@@ -27,6 +48,22 @@ public class CategoryServicec : ICategoryService
     }
 
     public List<CategoryDto> GetAllCategories()
+    {
+        var categories = _categoryRepository.GetAll();
+
+        return categories.Select(c => new CategoryDto
+        {
+
+            Name = c.Name,
+            RestaurantId = c.RestaurantId,
+
+
+            ProductIds = new List<int>()
+        })
+        .ToList();
+    }
+
+    public List<CategoryDto> GetByRestaurantId(int restaurantId)
     {
         throw new NotImplementedException();
     }

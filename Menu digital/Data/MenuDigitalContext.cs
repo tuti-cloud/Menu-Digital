@@ -19,8 +19,8 @@ namespace MenuDigital.Data
         {
             Restaurant luis = new Restaurant()
             {
-                Id = 1,
-                Name = "Regina",
+                RestaurantId = 1,
+                RestaurantName = "Regina",
                 Address = "Paraguay 1950",
                 PhoneNumber = "1111111",
                 Email = "aaa@gmail.com",

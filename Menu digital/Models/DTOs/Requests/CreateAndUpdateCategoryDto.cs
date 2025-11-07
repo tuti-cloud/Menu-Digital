@@ -4,6 +4,8 @@
         {
             public string Name { get; set; }
             public int RestaurantId { get; set; }
+
+        public List<int> ProductIds { get; set; } = new();
         }
  
 }

@@ -58,7 +58,10 @@ public class CategoryRepository : ICategoryRepository
         }
     } // SOLO NAME?
 
-  
+    public void AssignProducts(int categoryId, IEnumerable<int> productIds)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

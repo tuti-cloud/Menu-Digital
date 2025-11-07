@@ -13,7 +13,16 @@ namespace Menu_Digital.Controllers
         {
             _categoryService = categoryService;
         }
+        
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var categories = _categoryService.GetAllCategories();
+            if (!categories.Any())
+                return NoContent();
 
+            return Ok(categories);
+        }
     }
 }
 

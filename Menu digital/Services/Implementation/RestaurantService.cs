@@ -26,7 +26,7 @@ public class RestaurantService : IRestaurantService
     {
         Restaurant restaurant = new Restaurant()
         {
-            Name = restaurantDto.Name,
+            RestaurantName = restaurantDto.Name,
             Address = restaurantDto.Address,
             PhoneNumber = restaurantDto.PhoneNumber,
             Email = restaurantDto.Email,
@@ -36,7 +36,7 @@ public class RestaurantService : IRestaurantService
         var newRestaurant = _restaurantRepository.Create(restaurant);
         return new RestaurantDto
         {
-            Name = newRestaurant.Name,
+            Name = newRestaurant.RestaurantName,
             Address = newRestaurant.Address,
             Email = newRestaurant.Email,
             PhoneNumber = newRestaurant.PhoneNumber,
@@ -53,7 +53,7 @@ public class RestaurantService : IRestaurantService
         var restaurants = _restaurantRepository.GetAll()
       .Select(u => new RestaurantDto
       {
-          Name = u.Name,
+          Name = u.RestaurantName,
           Address = u.Address,
           Email = u.Email,
           PhoneNumber = u.PhoneNumber,
@@ -74,7 +74,7 @@ public class RestaurantService : IRestaurantService
 
         return new RestaurantDto
         {
-            Name = restaurant.Name,
+            Name = restaurant.  RestaurantName,
             Address = restaurant.Address,
             Email = restaurant.Email,
             PhoneNumber = restaurant.PhoneNumber,
@@ -86,7 +86,7 @@ public class RestaurantService : IRestaurantService
         // Convertir DTO → Entidad
         var updatedRestaurant = new Restaurant
         {
-            Name = updatedRestaurantDto.Name,
+            RestaurantName = updatedRestaurantDto.Name,
             Address = updatedRestaurantDto.Address,
             PhoneNumber = updatedRestaurantDto.PhoneNumber,
             Email = updatedRestaurantDto.Email,
@@ -101,7 +101,7 @@ public class RestaurantService : IRestaurantService
         // Convertir Entidad → DTO
         return new RestaurantDto
         {
-            Name = restaurant.Name,
+            Name = restaurant.RestaurantName,
             Address = restaurant.Address,
             PhoneNumber = restaurant.PhoneNumber,
             Email = restaurant.Email

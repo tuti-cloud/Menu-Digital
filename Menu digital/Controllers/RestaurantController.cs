@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Menu_Digital.Controllers
 {
-    [Route("api/[restaurants]")]
+    
+    [Route("api/[controller]")]
     [Authorize]
     [ApiController]
     public class RestaurantController : ControllerBase

@@ -23,7 +23,7 @@ public class RestaurantService : IRestaurantService
         if (restaurant is null)
         
             return null;
-        if (restaurant.Password == password)
+        if (restaurant.PasswordHash == password)
             return restaurant;
         return null;
     }
@@ -32,17 +32,17 @@ public class RestaurantService : IRestaurantService
     {
         Restaurant restaurant = new Restaurant()
         {
-            RestaurantName = restaurantDto.Name,
+            Name = restaurantDto.Name,
             Address = restaurantDto.Address,
             PhoneNumber = restaurantDto.PhoneNumber,
             Email = restaurantDto.Email,
-            Password = restaurantDto.Password,
+            PasswordHash = restaurantDto.Password,
         };
 
         var newRestaurant = _restaurantRepository.Create(restaurant);
         return new RestaurantDto
         {
-            Name = newRestaurant.RestaurantName,
+            Name = newRestaurant.Name,
             Address = newRestaurant.Address,
             Email = newRestaurant.Email,
             PhoneNumber = newRestaurant.PhoneNumber,
@@ -59,7 +59,7 @@ public class RestaurantService : IRestaurantService
         var restaurants = _restaurantRepository.GetAll()
       .Select(u => new RestaurantDto
       {
-          Name = u.RestaurantName,
+          Name = u.Name,
           Address = u.Address,
           Email = u.Email,
           PhoneNumber = u.PhoneNumber,
@@ -80,7 +80,7 @@ public class RestaurantService : IRestaurantService
 
         return new RestaurantDto
         {
-            Name = restaurant.  RestaurantName,
+            Name = restaurant.  Name,
             Address = restaurant.Address,
             Email = restaurant.Email,
             PhoneNumber = restaurant.PhoneNumber,
@@ -92,11 +92,11 @@ public class RestaurantService : IRestaurantService
         // Convertir DTO → Entidad
         var updatedRestaurant = new Restaurant
         {
-            RestaurantName = updatedRestaurantDto.Name,
+            Name = updatedRestaurantDto.Name,
             Address = updatedRestaurantDto.Address,
             PhoneNumber = updatedRestaurantDto.PhoneNumber,
             Email = updatedRestaurantDto.Email,
-            Password = updatedRestaurantDto.Password
+            PasswordHash = updatedRestaurantDto.Password
         };
 
         _restaurantRepository.Update(updatedRestaurant, restaurantId);
@@ -107,7 +107,7 @@ public class RestaurantService : IRestaurantService
         // Convertir Entidad → DTO
         return new RestaurantDto
         {
-            Name = restaurant.RestaurantName,
+            Name = restaurant.Name,
             Address = restaurant.Address,
             PhoneNumber = restaurant.PhoneNumber,
             Email = restaurant.Email

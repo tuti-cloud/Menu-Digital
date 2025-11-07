@@ -39,7 +39,7 @@ public class ProductService : IProductService
             HappyHour = newProduct.HappyHour,
             IsRecommended = newProduct.IsRecommended,
             CategoryName = newProduct.Category?.Name,
-            RestaurantName = newProduct.Restaurant?.RestaurantName
+            RestaurantName = newProduct.Restaurant?.Name
         };
     }
 

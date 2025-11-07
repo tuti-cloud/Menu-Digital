@@ -7,7 +7,6 @@ namespace Menu_Digital.Services.Interfaces
     {
         List<CategoryDto> GetAllCategories();
         CategoryDto GetCategoryById(int id);
-        List<CategoryDto> GetByRestaurantId(int restaurantId);
         CategoryDto Create(CreateAndUpdateCategoryDto request);
         CategoryDto Update(CreateAndUpdateCategoryDto updatedCategoryDto, int categoryId);
         public void Delete(int categoryId);

@@ -29,17 +29,17 @@ public class ProductService : IProductService
             HappyHour = productDto.HappyHour,
             IsRecommended = productDto.Favorite
         };
-        var createdProduct = _productRepository.Create(product);
+        var newProduct = _productRepository.Create(product);
         return new ProductDto
         {
-            Name = createdProduct.Name,
-            Description = createdProduct.Description,
-            Price = createdProduct.Price,
-            DiscountPercentage = createdProduct.DiscountPercentage,
-            HappyHour = createdProduct.HappyHour,
-            IsRecommended = createdProduct.IsRecommended,
-            CategoryName = createdProduct.Category?.Name,
-            RestaurantName = createdProduct.Restaurant?.RestaurantName
+            Name = newProduct.Name,
+            Description = newProduct.Description,
+            Price = newProduct.Price,
+            DiscountPercentage = newProduct.DiscountPercentage,
+            HappyHour = newProduct.HappyHour,
+            IsRecommended = newProduct.IsRecommended,
+            CategoryName = newProduct.Category?.Name,
+            RestaurantName = newProduct.Restaurant?.RestaurantName
         };
     }
 

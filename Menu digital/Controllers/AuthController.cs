@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Menu_Digital.Controllers
 {
     [Route("api/[controller]")]
+
     [ApiController]
     
     

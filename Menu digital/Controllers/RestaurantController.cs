@@ -43,6 +43,7 @@ namespace Menu_Digital.Controllers
             return Ok(restaurant);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult CreateRestaurant(CreateAndUpdateRestaurantDto createRestaurantDto)
         {

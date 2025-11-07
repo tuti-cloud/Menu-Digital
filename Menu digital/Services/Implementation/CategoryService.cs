@@ -6,6 +6,7 @@ using Menu_Digital.Models.DTOs.Responses;
 using Menu_Digital.Repositories.Implementations;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
+using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -18,33 +19,26 @@ public class CategoryService : ICategoryService
         _categoryRepository = categoryRepository;
     }
 
-    public CategoryDto Create(CreateAndUpdateCategoryDto request)
+    public CategoryDto Create(CreateAndUpdateCategoryDto categoryDto)
     {
-       
-        var category = new Category
+
+        Category category = new Category()
         {
-            Name = request.Name,
-            RestaurantId = request.RestaurantId
+          Name = categoryDto.Name,
+          RestaurantId = categoryDto.RestaurantId, //debe estar?
         };
 
-      
-        var created = _categoryRepository.Create(category);
-
-        
-        var createdDto = new CategoryDto
+        var newCategory = _categoryRepository.Create(category);
+        return new CategoryDto
         {
-            
-            Name = created.Name,
-            RestaurantId = created.RestaurantId,
-            ProductIds = new List<int>() // por ahora no se asignan productos desde aquí
+            Name = newCategory.Name,
+            RestaurantId = newCategory.RestaurantId, //debe estar?
         };
-
-        return createdDto;
     }
 
     public void Delete(int categoryId)
     {
-        throw new NotImplementedException();
+        _categoryRepository.Delete(categoryId);
     }
 
     public List<CategoryDto> GetAllCategories()
@@ -63,14 +57,21 @@ public class CategoryService : ICategoryService
         .ToList();
     }
 
-    public List<CategoryDto> GetByRestaurantId(int restaurantId)
-    {
-        throw new NotImplementedException();
-    }
-
     public CategoryDto GetCategoryById(int id)
     {
-        throw new NotImplementedException();
+        var category = _categoryRepository.GetCategoryById(id);
+        if (category == null)
+        {
+            throw new Exception("category not found");
+        }
+
+        return new CategoryDto
+        {
+            Name = category.Name,
+            RestaurantId = category.RestaurantId,
+            ProductIds = new List<int>()
+
+        };
     }
 
     public CategoryDto Update(CreateAndUpdateCategoryDto updatedCategoryDto, int categoryId)

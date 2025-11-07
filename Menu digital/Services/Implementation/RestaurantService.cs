@@ -17,9 +17,15 @@ public class RestaurantService : IRestaurantService
         _restaurantRepository = restaurantRepository;
     }
 
-    public Restaurant? Authenticate(string Name, string passwordHash)
+    public Restaurant? Authenticate(string email, string password)
     {
-        throw new NotImplementedException();
+        var restaurant = _restaurantRepository.GetByEmail(email);
+        if (restaurant is null)
+        
+            return null;
+        if (restaurant.Password == password)
+            return restaurant;
+        return null;
     }
 
     public RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto)

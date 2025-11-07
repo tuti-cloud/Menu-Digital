@@ -12,8 +12,8 @@ namespace Menu_Digital.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
-    {
+    
+    
         public class AuthenticationController : ControllerBase
         {
             private readonly IConfiguration _config;
@@ -59,4 +59,3 @@ namespace Menu_Digital.Controllers
             }
         }
     }
-}

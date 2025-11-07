@@ -19,12 +19,12 @@ namespace MenuDigital.Data
         {
             Restaurant luis = new Restaurant()
             {
-                RestaurantId = 1,
-                RestaurantName = "Regina",
+                Id = 1,
+                Name = "Regina",
                 Address = "Paraguay 1950",
                 PhoneNumber = "1111111",
                 Email = "aaa@gmail.com",
-                Password = "1235"
+                PasswordHash = "1235"
             };
 
             modelBuilder.Entity<Restaurant>().HasData(

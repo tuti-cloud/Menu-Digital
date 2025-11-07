@@ -19,12 +19,12 @@ namespace Menu_Digital.Entities
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RestaurantId { get; set; }
-        public string RestaurantName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
         ICollection<Category> Categories { get; set; } // un restaurante tiene varias categorias.
 
     }

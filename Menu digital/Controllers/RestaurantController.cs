@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Menu_Digital.Controllers
 {
+    
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class RestaurantController : ControllerBase
     {
@@ -13,12 +17,23 @@ namespace Menu_Digital.Controllers
         {
             _restaurantService = restaurantService;
         }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var restaurants = _restaurantService.GetAllRestaurants();
+            if (!restaurants.Any())
+                return NoContent();
+
+            return Ok(restaurants);
+        
+        }
+
+
     }
+
+
 }
 
-// RestaurantsController
-// [ApiController]
-// [Route("api/restaurants")]
 
-// GET /api/restaurants
+
 

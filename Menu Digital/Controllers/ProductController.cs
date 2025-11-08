@@ -104,6 +104,13 @@ namespace Menu_Digital.Controllers
             var count = _productService.SetHappyHourForRestaurant(restaurantId, enabled);
             return Ok(new { affected = count, happyHourEnabled = enabled });
         }
+
+        [HttpPut("{productId:int}/discount")]
+        public IActionResult UpdateDiscount(int productId, [FromBody] CreateAndUpdateProductDto dto)
+        {
+            _productService.UpdateDiscount(productId, dto.DiscountPercentage);
+            return Ok(new { message = $"Discount updated to {dto.DiscountPercentage}%" });
+        }
     }
 }
 

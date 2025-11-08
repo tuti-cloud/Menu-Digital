@@ -186,5 +186,13 @@ namespace Menu_Digital.Services.Implementation
             CategoryName = p.Category?.Name,
             RestaurantName = p.Restaurant?.Name
         };
+        public void UpdateDiscount(int productId, int discountPercentage)
+        {
+            // validación simple (0–100, podés ajustarla)
+            if (discountPercentage < 0 || discountPercentage > 100)
+                throw new Exception("discount must be between 0 and 100");
+
+            _productRepository.UpdateDiscount(productId, discountPercentage);
+        }
     }
 }

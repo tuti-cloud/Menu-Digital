@@ -1,12 +1,14 @@
 ﻿using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Menu_Digital.Controllers
 {
     [Route("api/products")]
+    [Authorize] 
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -17,6 +19,7 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var products = _productService.GetAllProducts();
@@ -27,6 +30,7 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpGet("{productId}")]
+        [AllowAnonymous]
         public IActionResult GetProductId(int productId)
         {
             var product = _productService.GetProductById(productId);
@@ -39,11 +43,13 @@ namespace Menu_Digital.Controllers
             return Ok(product);
         }
         [HttpGet("recommended")]
+        [AllowAnonymous]
         public IActionResult GetRecommended()
         {
             var result = _productService.GetRecommended(); // ICollection<ProductDto>
             return Ok(result);
         }
+
 
 
         [HttpPost]

@@ -131,36 +131,60 @@ namespace Menu_Digital.Services.Implementation
             }).ToList();
         }
 
-        public ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId)
+        public ICollection<ProductDto> GetHappyHour(int restaurantId)
         {
-            var updatedProduct = new Product
+            // Si nadie tiene HH activo, devuelve vacío
+            return _productRepository.GetHappyHour(restaurantId)
+                        .Select(MapToDto)
+                        .ToList();
+        }
+
+        public ICollection<ProductDto> GetDiscounted(int restaurantId)
+        {
+            return _productRepository.GetDiscounted(restaurantId)
+                        .Select(MapToDto)
+                        .ToList();
+        }
+
+        public int SetHappyHourForRestaurant(int restaurantId, bool enabled)
+        {
+            // Cambia HH = enabled para TODOS los productos del restaurante
+            return _productRepository.SetHappyHourForRestaurant(restaurantId, enabled);
+        }
+
+       
+        public ProductDto Update(CreateAndUpdateProductDto dto, int productId)
+        {
+            var updated = new Product
             {
-                Name = updatedProductDto.Name,
-                Description = updatedProductDto.Description,
-                Price = updatedProductDto.Price,
-                DiscountPercentage = updatedProductDto.DiscountPercentage,
-                HappyHour = updatedProductDto.HappyHour,
-                IsRecommended = updatedProductDto.Favorite
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price,
+                DiscountPercentage = dto.DiscountPercentage,
+                HappyHour = dto.HappyHour,
+                IsRecommended = dto.Favorite
             };
 
-            _productRepository.Update(updatedProduct, productId);
+            _productRepository.Update(updated, productId);
+            var p = _productRepository.GetProductById(productId);
 
-            var product = _productRepository.GetProductById(productId);
-            if (product == null)
+            if (p == null)
                 throw new Exception("product not found after update");
 
-            return new ProductDto
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                DiscountPercentage = product.DiscountPercentage,
-                HappyHour = product.HappyHour,
-                IsRecommended = product.IsRecommended,
-                CategoryName = product.Category?.Name,
-                RestaurantName = product.Restaurant?.Name
-            };
+            return MapToDto(p);
         }
+
+        // Helper
+        private static ProductDto MapToDto(Product p) => new ProductDto
+        {
+            Name = p.Name,
+            Description = p.Description,
+            Price = p.Price,
+            DiscountPercentage = p.DiscountPercentage,
+            HappyHour = p.HappyHour,
+            IsRecommended = p.IsRecommended,
+            CategoryName = p.Category?.Name,
+            RestaurantName = p.Restaurant?.Name
+        };
     }
 }
-

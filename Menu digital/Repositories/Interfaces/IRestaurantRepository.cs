@@ -8,7 +8,9 @@ namespace Menu_Digital.Repositories.Interfaces
         Restaurant? GetRestaurantById(int id);
         Restaurant Create(Restaurant restaurant);
         void Update(Restaurant updatedRestaurant, int restaurantId);
-        void Delete(int id);
+       
         public Restaurant? GetByEmail(string email); //para autenticación
+        void DeleteByEmail(string email);
+        
     }
 }

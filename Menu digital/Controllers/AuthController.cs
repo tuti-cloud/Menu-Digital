@@ -29,7 +29,7 @@ namespace Menu_Digital.Controllers
             [HttpPost]
             public IActionResult Authenticate([FromBody] CredentialRequestDto credentials)
             {
-                Restaurant? restaurant = _restaurantService.Authenticate(credentials.Email, credentials.Password);
+                Restaurant? restaurant = _restaurantService.Authenticate(credentials.Email, credentials.PasswordHash);
 
                 if (restaurant is not null)
                 {

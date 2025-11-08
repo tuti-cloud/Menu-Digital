@@ -13,6 +13,7 @@ namespace Menu_Digital.Services.Interfaces
         ProductDto Create(CreateAndUpdateProductDto productDto);
         ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId);
         public void Delete(int productId);
+        ICollection<ProductDto> GetRecommended();
     }
 }
 

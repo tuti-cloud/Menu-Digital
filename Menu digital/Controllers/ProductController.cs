@@ -38,6 +38,13 @@ namespace Menu_Digital.Controllers
 
             return Ok(product);
         }
+        [HttpGet("recommended")]
+        public IActionResult GetRecommended()
+        {
+            var result = _productService.GetRecommended(); // ICollection<ProductDto>
+            return Ok(result);
+        }
+
 
         [HttpPost]
         public IActionResult CreateProduct(CreateAndUpdateProductDto createProductDto)

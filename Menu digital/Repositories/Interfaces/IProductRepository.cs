@@ -14,7 +14,7 @@ namespace Menu_Digital.Repositories.Interfaces
         public ICollection<Product> GetDiscountedProduct(int restauranteId); //obtener productos con descuento de un restaurante
         public ICollection<Product> GetHaappyHourProduct(int restauranteId); //obtener productos en happy hour de un restaurante
 
-        public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended); //obtener productos recomendados de un restaurante
+        public ICollection<Product> GetRecommended(); //obtener productos recomendados 
 
 
     }

@@ -94,6 +94,13 @@ public class ProductRepository : IProductRepository
         // (Suele ser raro mover el restaurante, pero CategoryId es más común)
     }
 
+    public ICollection<Product> GetRecommended()
+    {
+        return _context.Products
+            .Where(p => p.IsRecommended)
+            .ToList(); // List<Product> cumple ICollection<Product>
+    }
 
-    
+
+
 }

@@ -129,4 +129,14 @@ public class ProductRepository : IProductRepository
         return items.Count;
     }
 
+    public void UpdateDiscount(int productId, int discountPercentage)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+        if (product == null)
+            throw new Exception("product not found");
+
+        product.DiscountPercentage = discountPercentage; // int -> double OK (conversión implícita)
+        _context.SaveChanges();
+    }
+
 }

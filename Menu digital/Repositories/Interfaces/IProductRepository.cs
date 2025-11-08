@@ -19,6 +19,7 @@ namespace Menu_Digital.Repositories.Interfaces
         public ICollection<Product> GetHappyHour(int restaurantId);
         public ICollection<Product> GetDiscounted(int restaurantId);
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);
+        public void UpdateDiscount(int productId, int discountPercentage);
     }
 }
 

@@ -101,6 +101,32 @@ public class ProductRepository : IProductRepository
             .ToList(); // List<Product> cumple ICollection<Product>
     }
 
+   
+    public ICollection<Product> GetHappyHour(int restaurantId)
+    {
+        return _context.Products
+            .Where(p => p.RestaurantId == restaurantId && p.HappyHour)
+            .ToList();
+    }
 
+    public ICollection<Product> GetDiscounted(int restaurantId)
+    {
+        return _context.Products
+            .Where(p => p.RestaurantId == restaurantId && p.DiscountPercentage > 0)
+            .ToList();
+    }
+
+    public int SetHappyHourForRestaurant(int restaurantId, bool enabled)
+    {
+        var items = _context.Products
+            .Where(p => p.RestaurantId == restaurantId)
+            .ToList();
+
+        foreach (var p in items)
+            p.HappyHour = enabled;
+
+        _context.SaveChanges();
+        return items.Count;
+    }
 
 }

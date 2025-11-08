@@ -80,6 +80,30 @@ namespace Menu_Digital.Controllers
             var updatedProduct = _productService.Update(dto, productId);
             return Ok(updatedProduct);
         }
+        [HttpGet("{restaurantId}/happyhour")]
+        public IActionResult GetHappyHour(int restaurantId)
+        {
+            var result = _productService.GetHappyHour(restaurantId);
+            return Ok(result);
+        }
+
+        // GET: api/products/{restaurantId}/discounted
+        // Devuelve productos con descuento (DiscountPercentage > 0)
+        [HttpGet("{restaurantId}/discounted")]
+        public IActionResult GetDiscounted(int restaurantId)
+        {
+            var result = _productService.GetDiscounted(restaurantId);
+            return Ok(result);
+        }
+
+        // PUT: api/products/{restaurantId}/happyhour/{enabled}
+        // Habilita/Deshabilita el Happy Hour de TODOS los productos del restaurante
+        [HttpPut("{restaurantId}/happyhour/{enabled}")]
+        public IActionResult SetHappyHourForRestaurant(int restaurantId, bool enabled)
+        {
+            var count = _productService.SetHappyHourForRestaurant(restaurantId, enabled);
+            return Ok(new { affected = count, happyHourEnabled = enabled });
+        }
     }
 }
 

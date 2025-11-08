@@ -17,7 +17,7 @@ namespace Menu_Digital.Entities
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; } //un producto se relaciona con varios rest.
         public int RestaurantId { get; set; }
-        public double DiscountPercentage { get; set; } // null si no tiene descuento // 10, 20, 50
+        public double? DiscountPercentage { get; set; } // null si no tiene descuento // 10, 20, 50
         public bool HappyHour { get; set; }
         public bool IsRecommended { get; set; }
     }

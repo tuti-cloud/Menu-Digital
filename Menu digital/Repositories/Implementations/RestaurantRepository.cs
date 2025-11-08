@@ -22,7 +22,7 @@ public class RestaurantRepository : IRestaurantRepository
 
     public void Delete(int id)
     {
-        var RestaurantToDelete = _context.Restaurants.FirstOrDefault(r => r.Id == id); //busca el restaurante con el id especificado
+        var RestaurantToDelete = _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id); //busca el restaurante con el id especificado
         if (RestaurantToDelete != null)
         {
             _context.Restaurants.Remove(RestaurantToDelete); //si lo encuentra, lo elimina de la lista
@@ -41,12 +41,12 @@ public class RestaurantRepository : IRestaurantRepository
 
     public Restaurant? GetRestaurantById(int id)
     {
-        return _context.Restaurants.FirstOrDefault(r => r.Id == id);
+        return _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id);
     }
 
     public void Update(Restaurant updatedRestaurant, int restaurantId)
     {
-        Restaurant? restaurant = _context.Restaurants.SingleOrDefault(r => r.Id == restaurantId);
+        Restaurant? restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
         if (restaurant is not null)
         {
             restaurant.Name = updatedRestaurant.Name;

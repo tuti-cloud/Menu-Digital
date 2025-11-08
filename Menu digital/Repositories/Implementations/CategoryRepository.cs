@@ -23,7 +23,7 @@ public class CategoryRepository : ICategoryRepository
 
     public void Delete(int id)
     {
-        var CategoryToDelete = _context.Categories.FirstOrDefault(c => c.Id == id); //busca la category con el id especificado
+        var CategoryToDelete = _context.Categories.FirstOrDefault(c => c.CategoryId == id); //busca la category con el id especificado
         if (CategoryToDelete != null)
         {
             _context.Categories.Remove(CategoryToDelete); //si la encuentra, la elimina de la lista
@@ -33,7 +33,7 @@ public class CategoryRepository : ICategoryRepository
 
     public Category? GetCategoryById(int id)
     {
-        return _context.Categories.FirstOrDefault(c => c.Id == id);
+        return _context.Categories.FirstOrDefault(c => c.CategoryId == id);
     }
 
     public ICollection<Category> GetAll()
@@ -49,7 +49,7 @@ public class CategoryRepository : ICategoryRepository
 
     public void Update(Category updatedCategory, int categoryId)
     {
-        Category? category = _context.Categories.SingleOrDefault(c => c.Id == categoryId);
+        Category? category = _context.Categories.SingleOrDefault(c => c.CategoryId == categoryId);
         if (category is not null)
         {
             category.Name = updatedCategory.Name;        

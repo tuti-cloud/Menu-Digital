@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Menu_Digital.Entities
 {
     public class Product
     {
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
@@ -14,7 +17,7 @@ namespace Menu_Digital.Entities
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; } //un producto se relaciona con varios rest.
         public int RestaurantId { get; set; }
-        public int DiscountPercentage { get; set; } // null si no tiene descuento // 10, 20, 50
+        public double DiscountPercentage { get; set; } // null si no tiene descuento // 10, 20, 50
         public bool HappyHour { get; set; }
         public bool IsRecommended { get; set; }
     }

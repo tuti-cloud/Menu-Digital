@@ -1,6 +1,8 @@
 ﻿using Menu_Digital.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mono.TextTemplating;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MenuDigital.Data
 {
@@ -17,18 +19,39 @@ namespace MenuDigital.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Restaurant luis = new Restaurant()
+            Restaurant resto = new Restaurant()
             {
-                Id = 1,
-                Name = "Regina",
-                Address = "Paraguay 1950",
+                RestaurantId = 1,
+                Name = "Sushi Club",
+                Address = "japon 123",
                 PhoneNumber = "1111111",
-                Email = "aaa@gmail.com",
-                PasswordHash = "1235"
+                Email = "sushiclub@gmail.com",
+                PasswordHash = "sushi123"
+                
             };
-
+            Category Bebidas = new Category()
+            { 
+                CategoryId= 1,
+                Name= "Bebidas",
+                RestaurantId= 1,
+                };
+            Product Coca = new Product()
+            {
+                ProductId  = 1,
+                Name = "Coca Cola",
+                Description= "Bebida gasificada refrescante capaz q te moris joven",
+                Price = 3000,
+                CategoryId= 1,
+                RestaurantId = 1,
+                DiscountPercentage= 0.5,
+                HappyHour = false,
+                IsRecommended = false,
+            };
+            
             modelBuilder.Entity<Restaurant>().HasData(
-                luis);
+                resto);
+            modelBuilder.Entity<Category>().HasData(Bebidas);
+            modelBuilder.Entity<Product>().HasData(Coca);
 
             base.OnModelCreating(modelBuilder);
         }

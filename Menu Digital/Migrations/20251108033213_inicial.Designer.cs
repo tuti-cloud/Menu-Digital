@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Menu_Digital.Migrations
 {
     [DbContext(typeof(MenuDigitalContext))]
-    [Migration("20251022175821_inicial")]
+    [Migration("20251108033213_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace Menu_Digital.Migrations
 
             modelBuilder.Entity("Menu_Digital.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -32,16 +32,24 @@ namespace Menu_Digital.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            Name = "Bebidas",
+                            RestaurantId = 1
+                        });
                 });
 
             modelBuilder.Entity("Menu_Digital.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -52,13 +60,13 @@ namespace Menu_Digital.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("DiscountPercentage")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("Favorite")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("DiscountPercentage")
+                        .HasColumnType("REAL");
 
                     b.Property<bool>("HappyHour")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRecommended")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -71,18 +79,32 @@ namespace Menu_Digital.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductId = 1,
+                            CategoryId = 1,
+                            Description = "Bebida gasificada refrescante capaz q te moris joven",
+                            DiscountPercentage = 0.5,
+                            HappyHour = false,
+                            IsRecommended = false,
+                            Name = "Coca Cola",
+                            Price = 3000m,
+                            RestaurantId = 1
+                        });
                 });
 
             modelBuilder.Entity("Menu_Digital.Entities.Restaurant", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RestaurantId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -106,18 +128,18 @@ namespace Menu_Digital.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("RestaurantId");
 
                     b.ToTable("Restaurants");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Address = "Paraguay 1950",
-                            Email = "aaa@gmail.com",
-                            Name = "Regina",
-                            PasswordHash = "1235",
+                            RestaurantId = 1,
+                            Address = "japon 123",
+                            Email = "sushiclub@gmail.com",
+                            Name = "Sushi Club",
+                            PasswordHash = "sushi123",
                             PhoneNumber = "1111111"
                         });
                 });
@@ -136,7 +158,7 @@ namespace Menu_Digital.Migrations
             modelBuilder.Entity("Menu_Digital.Entities.Product", b =>
                 {
                     b.HasOne("Menu_Digital.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -150,6 +172,11 @@ namespace Menu_Digital.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("Menu_Digital.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

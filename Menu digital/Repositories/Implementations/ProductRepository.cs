@@ -22,7 +22,7 @@ public class ProductRepository : IProductRepository
 
     public void Delete(int id)
     {
-        var ProductToDelete = _context.Products.FirstOrDefault(p => p.Id == id); //busca el producto con el id especificado
+        var ProductToDelete = _context.Products.FirstOrDefault(p => p.ProductId == id); //busca el producto con el id especificado
         if (ProductToDelete != null)
         {
             _context.Products.Remove(ProductToDelete); //si lo encuentra, lo elimina de la lista
@@ -35,7 +35,7 @@ public class ProductRepository : IProductRepository
     }
     public Product? GetProductById(int id)
     {
-        return _context.Products.FirstOrDefault(p => p.Id == id);
+        return _context.Products.FirstOrDefault(p => p.ProductId == id);
     }
      public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended)
     {
@@ -76,7 +76,7 @@ public class ProductRepository : IProductRepository
 
     public void Update(Product updatedProduct, int productId)
     {
-        Product? product = _context.Products.SingleOrDefault(p => p.Id == productId);
+        Product? product = _context.Products.SingleOrDefault(p => p.ProductId == productId);
         if (product is not null)
         {
             product.Name = updatedProduct.Name;

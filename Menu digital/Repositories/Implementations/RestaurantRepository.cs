@@ -58,4 +58,20 @@ public class RestaurantRepository : IRestaurantRepository
             _context.SaveChanges();
         }
     }
+    public void DeleteByEmail(string email)
+    {
+        var entity = GetByEmail(email);
+        if (entity != null)
+        {
+            _context.Restaurants.Remove(entity);
+            _context.SaveChanges();
+        }
+    }
+    public Restaurant GetByName(string name)
+    {
+        return _context.Restaurants
+            .FirstOrDefault(r => r.Name.ToLower() == name.ToLower());
+    }
+
+
 }

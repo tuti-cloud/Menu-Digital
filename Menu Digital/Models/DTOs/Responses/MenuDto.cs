@@ -2,7 +2,7 @@
 {
     public class MenuDto
     {   
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } 
         public List<ProductDto> Products { get; set; }
     }
 }

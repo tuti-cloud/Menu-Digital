@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Menu_Digital.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
@@ -79,16 +79,16 @@ namespace Menu_Digital.Controllers
             return Ok(updatedRestaurant);
         }
 
-        [HttpGet("{restaurantId:int}/menu")] //menu del restaurante
+        [HttpGet("product/{productName}")]
         [AllowAnonymous]
-        public IActionResult GetMenu(int restaurantId)
+        public IActionResult GetRestaurantsByProductName([FromRoute] string productName)
         {
-            var menu = _restaurantService.GetMenuByRestaurantId(restaurantId);
+            var result = _restaurantService.GetRestaurantsByProductName(productName);
 
-            if (menu == null || !menu.Any())
-                return NotFound(new { message = "No se encontraron categorías o productos para este restaurante." });
+            if (result == null || result.Count == 0)
+                return NotFound("No se encontraron restaurantes con ese producto.");
 
-            return Ok(menu);
+            return Ok(result);
         }
     }
 }

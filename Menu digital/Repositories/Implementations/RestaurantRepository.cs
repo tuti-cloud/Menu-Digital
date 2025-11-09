@@ -74,16 +74,18 @@ public class RestaurantRepository : IRestaurantRepository
             .FirstOrDefault(r => r.RestaurantName.ToLower() == name.ToLower());
     }
 
-    public ICollection<Restaurant> GetByProductName(string Name)
+    public ICollection<Product> GetProductsByName(string productName)
     {
-        throw new NotImplementedException();
-    }
+        if (string.IsNullOrWhiteSpace(productName))
+            return new List<Product>();
 
-    public ICollection<Category> GetMenuByRestaurantId(int restaurantId) //nuevo! para obtener el menu de un restaurante 
-    {
-        return _context.Categories
-            .Include(c => c.Products)
-            .Where(c => c.RestaurantId == restaurantId)
+        return _context.Products
+            .Include(p => p.Restaurant)
+            .Where(p => EF.Functions.Like(p.ProductName, $"%{productName}%"))
             .ToList();
     }
+
+
 }
+
+

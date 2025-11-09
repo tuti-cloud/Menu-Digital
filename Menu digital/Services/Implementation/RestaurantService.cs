@@ -5,6 +5,7 @@ using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -125,26 +126,18 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public List<MenuDto> GetMenuByRestaurantId(int restaurantId) //para menu del restaurante
+    public ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName)
     {
-        var categories = _restaurantRepository.GetMenuByRestaurantId(restaurantId);
-        if (categories == null || !categories.Any())
-            return new List<MenuDto>();
+        if (string.IsNullOrWhiteSpace(productName))
+            throw new Exception("Debe ingresar un nombre de producto válido.");
 
-        return categories.Select(c => new MenuDto
+        var products = _restaurantRepository.GetProductsByName(productName);
+
+        return products.Select(p => new SearchProductByRestaurantDto
         {
-            CategoryName = c.CategoryName,
-            Products = c.Products.Select(p => new ProductDto
-            {
-                Name = p.ProductName,
-                Description = p.Description,
-                Price = p.Price,
-                DiscountPercentage = p.DiscountPercentage,
-                HappyHour = p.HappyHour,
-                IsRecommended = p.IsRecommended,
-                CategoryName = c.CategoryName,
-                RestaurantName = p.Restaurant?.RestaurantName
-            }).ToList()
+            RestaurantName = p.Restaurant.RestaurantName,
+            ProductName = p.ProductName
         }).ToList();
-    } 
+    }
+
 }

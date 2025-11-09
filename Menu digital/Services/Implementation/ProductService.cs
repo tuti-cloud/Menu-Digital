@@ -184,7 +184,7 @@ namespace Menu_Digital.Services.Implementation
             return _productRepository.SetHappyHourForRestaurant(restaurantId, enabled);
         }
 
-       
+
         public ProductDto Update(CreateAndUpdateProductDto dto, int productId)
         {
             var updated = new Product
@@ -226,5 +226,30 @@ namespace Menu_Digital.Services.Implementation
 
             _productRepository.UpdateDiscount(productId, discountPercentage);
         }
+
+        public List<ProductDto> IncreasePrices(int restaurantId, decimal percentage)
+        {
+
+            if (percentage <= -100m) // validación para que no sea neg
+                throw new ArgumentException("El porcentaje debe ser mayor a -100.");
+
+            var updatedProducts = _productRepository.IncreasePricesByRestaurant(restaurantId, percentage);
+
+            var dtos = updatedProducts //mapea dtos
+                .Select(p => new ProductDto
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    DiscountPercentage = p.DiscountPercentage,
+                    HappyHour = p.HappyHour,
+                    IsRecommended = p.IsRecommended,
+                    CategoryName = p.Category?.Name,
+                    RestaurantName = p.Restaurant?.Name
+                })
+                .ToList();
+
+            return dtos;
+            }
+        }
     }
-}

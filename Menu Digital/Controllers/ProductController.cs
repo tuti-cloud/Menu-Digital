@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Menu_Digital.Controllers
 {
     [Route("api/products")]
-    [Authorize] 
+    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -113,6 +113,33 @@ namespace Menu_Digital.Controllers
             _productService.UpdateDiscount(productId, dto.DiscountPercentage);
             return Ok(new { message = $"Discount updated to {dto.DiscountPercentage}%" });
         }
-    }
-}
 
+        [HttpPut("increase-prices/{restaurantId}")]
+        public IActionResult IncreasePrices(int restaurantId, [FromQuery] decimal percentage)
+        {
+            try
+            {
+                if (percentage == 0m)
+                    return BadRequest("El porcentaje debe ser distinto de 0.");
+
+                var updated = _productService.IncreasePrices(restaurantId, percentage);
+
+                if (updated == null || !updated.Any())
+                    return NotFound($"No se encontraron productos para el restaurantId {restaurantId}.");
+
+                return Ok(updated);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Para producción podrías loguear el error y devolver un mensaje más genérico.
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+
+        }
+    }
+
+}

@@ -3,7 +3,6 @@ using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -59,19 +58,12 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpDelete]
-        [Route("{email}/{passwordHash}")]
-        public IActionResult DeleteRestaurant(string email, string passwordHash)
+        [Route("{restaurantId}")]
+        public IActionResult DeleteRestaurant(int restaurantId)
         {
-            var dto = new CredentialRequestDto
-            {
-                Email = email,
-                PasswordHash = passwordHash
-            };
-
-            _restaurantService.AutoDelete(dto);
-            return Ok("Eliminado con éxito");
+            _restaurantService.Delete(restaurantId);
+            return NoContent();
         }
-
 
         [HttpPut]
         [Route("{restaurantId}")]

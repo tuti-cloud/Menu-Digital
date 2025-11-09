@@ -49,20 +49,11 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public void AutoDelete(CredentialRequestDto dto)
+    public void Delete(int restaurantid)
     {
-        if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.PasswordHash))
-            throw new Exception("Email y contraseña son requeridos.");
-
-        var restaurant = _restaurantRepository.GetByEmail(dto.Email);
-        if (restaurant == null)
-            throw new Exception("Email o contraseña incorrectos.");
-
-        if (restaurant.PasswordHash != dto.PasswordHash)
-            throw new Exception("Email o contraseña incorrectos.");
-
-        _restaurantRepository.DeleteByEmail(dto.Email);
+        _restaurantRepository.Delete(restaurantid);
     }
+
     public List<RestaurantDto> GetAllRestaurants()
     {
         var restaurants = _restaurantRepository.GetAll()

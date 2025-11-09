@@ -97,6 +97,7 @@ namespace Menu_Digital.Controllers
         }
 
 
+
         // PUT: api/products/{restaurantId}/happyhour/{enabled}
         // Habilita/Deshabilita el Happy Hour de TODOS los productos del restaurante
         [HttpPut("{restaurantId}/happyhour/{enabled}")]

@@ -15,7 +15,7 @@ namespace Menu_Digital.Services.Interfaces
         public void Delete(int productId);
         ICollection<ProductDto> GetRecommended();
         ICollection<ProductDto> GetHappyHourByName(string restaurantName);
-        ICollection<ProductDto> GetDiscountedByName(string restaurantName);
+        ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName);
 
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);
         public void UpdateDiscount(int productId, int discountPercentage);

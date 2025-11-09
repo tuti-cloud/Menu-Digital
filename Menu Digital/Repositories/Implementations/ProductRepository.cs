@@ -79,7 +79,7 @@ public class ProductRepository : IProductRepository
         Product? product = _context.Products.SingleOrDefault(p => p.ProductId == productId);
         if (product is not null)
         {
-            product.Name = updatedProduct.Name;
+            product.ProductName = updatedProduct.ProductName;
             product.IsRecommended = updatedProduct.IsRecommended;
             product.Description = updatedProduct.Description;
             product.Price = updatedProduct.Price;
@@ -137,6 +137,29 @@ public class ProductRepository : IProductRepository
 
         product.DiscountPercentage = discountPercentage; // int -> double OK (conversión implícita)
         _context.SaveChanges();
+    }
+
+    public ICollection<Product> IncreasePricesByRestaurant(int restaurantId, decimal percentage)
+    {
+        var products = _context.Products  // cargar productos del restaurante
+            .Where(p => p.ProductId == restaurantId)
+            .ToList();
+
+        if (!products.Any())
+            return products;
+
+        if (percentage <= -100m) //  límite a -100 para que no de negativos
+            throw new ArgumentException("El porcentaje debe ser mayor a -100.");
+
+        decimal multiplier = 1 + (percentage / 100m);
+
+        foreach (var p in products)
+        {
+            p.Price = Math.Round(p.Price * multiplier, 2, MidpointRounding.AwayFromZero);  // actualizar precio (redondea a 2 dec)
+        }
+        _context.SaveChanges();
+
+        return products;
     }
 
 }

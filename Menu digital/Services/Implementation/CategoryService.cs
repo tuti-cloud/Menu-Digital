@@ -24,14 +24,14 @@ public class CategoryService : ICategoryService
 
         Category category = new Category()
         {
-          Name = categoryDto.Name,
+          CategoryName = categoryDto.Name,
           RestaurantId = categoryDto.RestaurantId, //debe estar?
         };
 
         var newCategory = _categoryRepository.Create(category);
         return new CategoryDto
         {
-            Name = newCategory.Name,
+            Name = newCategory.CategoryName,
             RestaurantId = newCategory.RestaurantId, //debe estar?
         };
     }
@@ -48,7 +48,7 @@ public class CategoryService : ICategoryService
         return categories.Select(c => new CategoryDto
         {
 
-            Name = c.Name,
+            Name = c.CategoryName,
             RestaurantId = c.RestaurantId,
 
 
@@ -67,7 +67,7 @@ public class CategoryService : ICategoryService
 
         return new CategoryDto
         {
-            Name = category.Name,
+            Name = category.CategoryName,
             RestaurantId = category.RestaurantId,
             ProductIds = new List<int>()
 
@@ -79,7 +79,7 @@ public class CategoryService : ICategoryService
         // Convertir DTO → Entidad
         var updatedCategory = new Category
         {
-            Name = updatedCategoryDto.Name,
+            CategoryName = updatedCategoryDto.Name,
     
         };
 
@@ -91,7 +91,7 @@ public class CategoryService : ICategoryService
         // Convertir Entidad → DTO
         return new CategoryDto
         {
-            Name = category.Name,
+            Name = category.CategoryName,
             
         };
     }

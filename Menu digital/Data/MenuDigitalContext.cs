@@ -22,7 +22,7 @@ namespace MenuDigital.Data
             Restaurant resto = new Restaurant()
             {
                 RestaurantId = 1,
-                Name = "Sushi Club",
+                RestaurantName = "Sushi Club",
                 Address = "japon 123",
                 PhoneNumber = "1111111",
                 Email = "sushiclub@gmail.com",
@@ -32,13 +32,13 @@ namespace MenuDigital.Data
             Category Bebidas = new Category()
             { 
                 CategoryId= 1,
-                Name= "Bebidas",
+                CategoryName= "Bebidas",
                 RestaurantId= 1,
                 };
             Product Coca = new Product()
             {
                 ProductId  = 1,
-                Name = "Coca Cola",
+                ProductName = "Coca Cola",
                 Description= "Bebida gasificada refrescante capaz q te moris joven",
                 Price = 3000,
                 CategoryId= 1,

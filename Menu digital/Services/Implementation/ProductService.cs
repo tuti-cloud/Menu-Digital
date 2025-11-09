@@ -30,7 +30,7 @@ namespace Menu_Digital.Services.Implementation
         {
             var product = new Product
             {
-                Name = productDto.Name,
+                ProductName = productDto.Name,
                 Description = productDto.Description,
                 Price = productDto.Price,
                 CategoryId = productDto.CategoryId,
@@ -44,14 +44,14 @@ namespace Menu_Digital.Services.Implementation
 
             return new ProductDto
             {
-                Name = newProduct.Name,
+                Name = newProduct.ProductName,
                 Description = newProduct.Description,
                 Price = newProduct.Price,
                 DiscountPercentage = newProduct.DiscountPercentage,
                 HappyHour = newProduct.HappyHour,
                 IsRecommended = newProduct.IsRecommended,
-                CategoryName = newProduct.Category?.Name,
-                RestaurantName = newProduct.Restaurant?.Name
+                CategoryName = newProduct.Category?.CategoryName,
+                RestaurantName = newProduct.Restaurant?.RestaurantName
             };
         }
 
@@ -65,14 +65,14 @@ namespace Menu_Digital.Services.Implementation
             var products = _productRepository.GetAll()
                 .Select(p => new ProductDto
                 {
-                    Name = p.Name,
+                    Name = p.ProductName,
                     Description = p.Description,
                     Price = p.Price,
                     DiscountPercentage = p.DiscountPercentage,
                     HappyHour = p.HappyHour,
                     IsRecommended = p.IsRecommended,
-                    CategoryName = p.Category?.Name,
-                    RestaurantName = p.Restaurant?.Name
+                    CategoryName = p.Category?.CategoryName,
+                    RestaurantName = p.Restaurant?.RestaurantName
                 })
                 .ToList();
 
@@ -87,14 +87,14 @@ namespace Menu_Digital.Services.Implementation
 
             return new ProductDto
             {
-                Name = product.Name,
+                Name = product.ProductName,
                 Description = product.Description,
                 Price = product.Price,
                 DiscountPercentage = product.DiscountPercentage,
                 HappyHour = product.HappyHour,
                 IsRecommended = product.IsRecommended,
-                CategoryName = product.Category?.Name,
-                RestaurantName = product.Restaurant?.Name
+                CategoryName = product.Category?.CategoryName,
+                RestaurantName = product.Restaurant?.RestaurantName
             };
         }
 
@@ -107,14 +107,14 @@ namespace Menu_Digital.Services.Implementation
 
             return new ProductDto
             {
-                Name = product.Name,
+                Name = product.ProductName,
                 Description = product.Description,
                 Price = product.Price,
                 DiscountPercentage = product.DiscountPercentage,
                 HappyHour = product.HappyHour,
                 IsRecommended = product.IsRecommended,
-                CategoryName = product.Category?.Name,
-                RestaurantName = product.Restaurant?.Name
+                CategoryName = product.Category?.CategoryName,
+                RestaurantName = product.Restaurant?.RestaurantName
             };
         }
 
@@ -128,14 +128,14 @@ namespace Menu_Digital.Services.Implementation
 
             return products.Select(p => new ProductDto
             {
-                Name = p.Name,
+                Name = p.ProductName,
                 Description = p.Description,
                 Price = p.Price,
                 DiscountPercentage = p.DiscountPercentage,
                 HappyHour = p.HappyHour,
                 IsRecommended = p.IsRecommended,
-                CategoryName = p.Category?.Name,
-                RestaurantName = p.Restaurant?.Name
+                CategoryName = p.Category?.CategoryName,
+                RestaurantName = p.Restaurant?.RestaurantName
             }).ToList();
         }
 
@@ -169,7 +169,7 @@ namespace Menu_Digital.Services.Implementation
 
                     return new DiscountedProductDto
                     {
-                        Name = p.Name,
+                        Name = p.ProductName,
                         DiscountPercentage = p.DiscountPercentage,
                         FinalPrice = Math.Round(finalPrice, 2) // redondeo a 2 decimales
                     };
@@ -184,12 +184,12 @@ namespace Menu_Digital.Services.Implementation
             return _productRepository.SetHappyHourForRestaurant(restaurantId, enabled);
         }
 
-       
+
         public ProductDto Update(CreateAndUpdateProductDto dto, int productId)
         {
             var updated = new Product
             {
-                Name = dto.Name,
+                ProductName = dto.Name,
                 Description = dto.Description,
                 Price = dto.Price,
                 DiscountPercentage = dto.DiscountPercentage,
@@ -209,14 +209,14 @@ namespace Menu_Digital.Services.Implementation
         // Helper
         private static ProductDto MapToDto(Product p) => new ProductDto
         {
-            Name = p.Name,
+            Name = p.ProductName,
             Description = p.Description,
             Price = p.Price,
             DiscountPercentage = p.DiscountPercentage,
             HappyHour = p.HappyHour,
             IsRecommended = p.IsRecommended,
-            CategoryName = p.Category?.Name,
-            RestaurantName = p.Restaurant?.Name
+            CategoryName = p.Category?.CategoryName,
+            RestaurantName = p.Restaurant?.RestaurantName
         };
         public void UpdateDiscount(int productId, int discountPercentage)
         {
@@ -226,5 +226,30 @@ namespace Menu_Digital.Services.Implementation
 
             _productRepository.UpdateDiscount(productId, discountPercentage);
         }
+
+        public List<ProductDto> IncreasePrices(int restaurantId, decimal percentage)
+        {
+
+            if (percentage <= -100m) // validación para que no sea neg
+                throw new ArgumentException("El porcentaje debe ser mayor a -100.");
+
+            var updatedProducts = _productRepository.IncreasePricesByRestaurant(restaurantId, percentage);
+
+            var dtos = updatedProducts //mapea dtos
+                .Select(p => new ProductDto
+                {
+                    Name = p.ProductName,
+                    Description = p.Description,
+                    Price = p.Price,
+                    DiscountPercentage = p.DiscountPercentage,
+                    HappyHour = p.HappyHour,
+                    IsRecommended = p.IsRecommended,
+                    CategoryName = p.Category?.CategoryName,
+                    RestaurantName = p.Restaurant?.RestaurantName
+                })
+                .ToList();
+
+            return dtos;
+            }
+        }
     }
-}

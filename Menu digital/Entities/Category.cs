@@ -8,7 +8,7 @@ namespace Menu_Digital.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
-        public string Name { get; set; }
+        public string CategoryName { get; set; }
 
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; } //una categoria se relaciona con varios restaurantes.

@@ -46,9 +46,11 @@ namespace Menu_Digital.Controllers
         [AllowAnonymous]
         public IActionResult GetRecommended()
         {
-            var result = _productService.GetRecommended(); // ICollection<ProductDto>
+            var result = _productService.GetRecommended();
             return Ok(result);
         }
+
+
 
 
 
@@ -107,12 +109,13 @@ namespace Menu_Digital.Controllers
             return Ok(new { affected = count, happyHourEnabled = enabled });
         }
 
-        [HttpPut("{productId:int}/discount")]
-        public IActionResult UpdateDiscount(int productId, [FromBody] CreateAndUpdateProductDto dto)
+        [HttpPut("{productId}/discount/{percentage}")]
+        public IActionResult UpdateDiscount(int productId, int percentage)
         {
-            _productService.UpdateDiscount(productId, dto.DiscountPercentage);
-            return Ok(new { message = $"Discount updated to {dto.DiscountPercentage}%" });
+            _productService.UpdateDiscount(productId, percentage);
+            return Ok("Discount updated successfully");
         }
+
 
         [HttpPut("increase-prices/{restaurantId}")]
         public IActionResult IncreasePrices(int restaurantId, [FromQuery] decimal percentage)

@@ -79,7 +79,7 @@ public class ProductRepository : IProductRepository
         Product? product = _context.Products.SingleOrDefault(p => p.ProductId == productId);
         if (product is not null)
         {
-            product.ProductName = updatedProduct.ProductName;
+            product.Name = updatedProduct.Name;
             product.IsRecommended = updatedProduct.IsRecommended;
             product.Description = updatedProduct.Description;
             product.Price = updatedProduct.Price;

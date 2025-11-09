@@ -90,6 +90,18 @@ namespace Menu_Digital.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("{restaurantId:int}/menu")]
+        [AllowAnonymous]
+        public IActionResult GetMenu(int restaurantId)
+        {
+            var menu = _restaurantService.GetMenuByRestaurantId(restaurantId);
+
+            if (menu == null || !menu.Any())
+                return NotFound(new { message = "No se encontraron categorías o productos para este restaurante." });
+
+            return Ok(menu);
+        }
     }
 }
 

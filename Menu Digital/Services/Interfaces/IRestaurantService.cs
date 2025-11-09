@@ -14,5 +14,7 @@ namespace Menu_Digital.Services.Interfaces
         public Restaurant? Authenticate(string email, string password);
         ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName);
 
+        List<MenuDto> GetMenuByRestaurantId(int restaurantId);
+
     }
 }

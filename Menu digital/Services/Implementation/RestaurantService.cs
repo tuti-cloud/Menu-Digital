@@ -5,6 +5,7 @@ using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -124,4 +125,19 @@ public class RestaurantService : IRestaurantService
             Email = restaurant.Email
         };
     }
+
+    public ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName)
+    {
+        if (string.IsNullOrWhiteSpace(productName))
+            throw new Exception("Debe ingresar un nombre de producto válido.");
+
+        var products = _restaurantRepository.GetProductsByName(productName);
+
+        return products.Select(p => new SearchProductByRestaurantDto
+        {
+            RestaurantName = p.Restaurant.RestaurantName,
+            ProductName = p.ProductName
+        }).ToList();
+    }
+
 }

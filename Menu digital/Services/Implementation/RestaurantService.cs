@@ -1,10 +1,11 @@
 ﻿namespace Menu_Digital.Services.Implementation;
-using System;
+using Humanizer;
 using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Xml.Linq;
@@ -49,9 +50,19 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public void Delete(int restaurantid)
-    {
-        _restaurantRepository.Delete(restaurantid);
+    public void AutoDelete(CredentialRequestDto dto)
+    { 
+            if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.PasswordHash))
+            throw new Exception("Email y contraseña son requeridos.");
+
+    var restaurant = _restaurantRepository.GetByEmail(dto.Email);
+        if (restaurant == null)
+            throw new Exception("Email o contraseña incorrectos.");
+
+        if (restaurant.PasswordHash != dto.PasswordHash)
+            throw new Exception("Email o contraseña incorrectos.");
+
+    _restaurantRepository.DeleteByEmail(dto.Email);
     }
 
     public List<RestaurantDto> GetAllRestaurants()

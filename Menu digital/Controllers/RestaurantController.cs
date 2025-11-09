@@ -58,11 +58,17 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpDelete]
-        [Route("{restaurantId}")]
-        public IActionResult DeleteRestaurant(int restaurantId)
+        [Route("{email}/{passwordHash}")]
+        public IActionResult DeleteRestaurant(string email, string passwordHash)
         {
-            _restaurantService.Delete(restaurantId);
-            return NoContent();
+            var dto = new CredentialRequestDto
+            {
+                Email = email,
+                PasswordHash = passwordHash
+            };
+
+            _restaurantService.AutoDelete(dto);
+            return Ok("Eliminado con éxito");
         }
 
         [HttpPut]

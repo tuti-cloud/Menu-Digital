@@ -29,9 +29,9 @@ namespace Menu_Digital.Controllers
             [HttpPost]
             public IActionResult Authenticate([FromBody] CredentialRequestDto credentials)
             {
-                Restaurant? restaurant = _restaurantService.Authenticate(credentials.Email, credentials.Password);
+            Restaurant? restaurant = _restaurantService.Authenticate(credentials.Email, credentials.PasswordHash);
 
-                if (restaurant is not null)
+            if (restaurant is not null)
                 {
                     var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"]));
 

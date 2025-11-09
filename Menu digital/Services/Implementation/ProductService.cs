@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Menu_Digital.Entities;
+﻿using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
+using Menu_Digital.Repositories.Implementations;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Menu_Digital.Services.Implementation
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
+
+        public ProductService(IProductRepository productRepository, IRestaurantRepository restaurantRepository)
+        {
+            _productRepository = productRepository;
+            _restaurantRepository = restaurantRepository;
+        }
 
         public ProductService(IProductRepository productRepository)
         {
@@ -131,20 +139,28 @@ namespace Menu_Digital.Services.Implementation
             }).ToList();
         }
 
-        public ICollection<ProductDto> GetHappyHour(int restaurantId)
+        public ICollection<ProductDto> GetHappyHourByName(string restaurantName)
         {
-            // Si nadie tiene HH activo, devuelve vacío
-            return _productRepository.GetHappyHour(restaurantId)
-                        .Select(MapToDto)
-                        .ToList();
+            var restaurant = _restaurantRepository.GetByName(restaurantName);
+            if (restaurant == null)
+                throw new Exception("Restaurant not found");
+
+            return _productRepository.GetHappyHour(restaurant.RestaurantId)
+                .Select(MapToDto)
+                .ToList();
         }
 
-        public ICollection<ProductDto> GetDiscounted(int restaurantId)
+        public ICollection<ProductDto> GetDiscountedByName(string restaurantName)
         {
-            return _productRepository.GetDiscounted(restaurantId)
-                        .Select(MapToDto)
-                        .ToList();
+            var restaurant = _restaurantRepository.GetByName(restaurantName);
+            if (restaurant == null)
+                throw new Exception("Restaurant not found");
+
+            return _productRepository.GetDiscounted(restaurant.RestaurantId)
+                .Select(MapToDto)
+                .ToList();
         }
+
 
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled)
         {

@@ -10,5 +10,7 @@ namespace Menu_Digital.Repositories.Interfaces
         void Update(Restaurant updatedRestaurant, int restaurantId);
         void DeleteByEmail(string email);
         public Restaurant? GetByEmail(string email); //para autenticación
+        Restaurant GetByName(string name);
+
     }
 }

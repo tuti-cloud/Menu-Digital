@@ -2,5 +2,6 @@
 {
     public class UpdateDiscountDto
     {
+        public double DiscountPercentage { get; set; }
     }
 }

@@ -11,4 +11,5 @@
             public string CategoryName { get; set; }
             public string RestaurantName { get; set; }
     }
+
 }

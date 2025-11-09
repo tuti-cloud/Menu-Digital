@@ -85,6 +85,14 @@ public class RestaurantRepository : IRestaurantRepository
             .ToList();
     }
 
+    public ICollection<Category> GetMenuByRestaurantId(int restaurantId)
+    {
+        return _context.Categories
+            .Include(c => c.Products)
+            .Where(c => c.RestaurantId == restaurantId)
+            .ToList();
+    }
+
 
 }
 

@@ -78,6 +78,18 @@ namespace Menu_Digital.Controllers
             var updatedRestaurant = _restaurantService.Update(dto, restaurantId);
             return Ok(updatedRestaurant);
         }
+
+        [HttpGet("{restaurantId:int}/menu")] //menu del restaurante
+        [AllowAnonymous]
+        public IActionResult GetMenu(int restaurantId)
+        {
+            var menu = _restaurantService.GetMenuByRestaurantId(restaurantId);
+
+            if (menu == null || !menu.Any())
+                return NotFound(new { message = "No se encontraron categorías o productos para este restaurante." });
+
+            return Ok(menu);
+        }
     }
 }
 

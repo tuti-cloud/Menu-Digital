@@ -3,6 +3,7 @@
 using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 public class RestaurantRepository : IRestaurantRepository
@@ -76,5 +77,13 @@ public class RestaurantRepository : IRestaurantRepository
     public ICollection<Restaurant> GetByProductName(string Name)
     {
         throw new NotImplementedException();
+    }
+
+    public ICollection<Category> GetMenuByRestaurantId(int restaurantId) //nuevo! para obtener el menu de un restaurante 
+    {
+        return _context.Categories
+            .Include(c => c.Products)
+            .Where(c => c.RestaurantId == restaurantId)
+            .ToList();
     }
 }

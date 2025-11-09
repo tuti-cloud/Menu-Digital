@@ -11,8 +11,8 @@ namespace Menu_Digital.Repositories.Interfaces
         void DeleteByEmail(string email);
         public Restaurant? GetByEmail(string email); //para autenticación
         Restaurant GetByName(string name);
-
         ICollection<Restaurant> GetByProductName(string Name);
+        public ICollection<Category> GetMenuByRestaurantId(int restaurantId); //nuevo! para obtener el menu de un restaurante 
 
     }
 }

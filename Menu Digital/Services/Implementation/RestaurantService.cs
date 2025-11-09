@@ -124,4 +124,27 @@ public class RestaurantService : IRestaurantService
             Email = restaurant.Email
         };
     }
+
+    public List<MenuDto> GetMenuByRestaurantId(int restaurantId) //para menu del restaurante
+    {
+        var categories = _restaurantRepository.GetMenuByRestaurantId(restaurantId);
+        if (categories == null || !categories.Any())
+            return new List<MenuDto>();
+
+        return categories.Select(c => new MenuDto
+        {
+            CategoryName = c.CategoryName,
+            Products = c.Products.Select(p => new ProductDto
+            {
+                Name = p.ProductName,
+                Description = p.Description,
+                Price = p.Price,
+                DiscountPercentage = p.DiscountPercentage,
+                HappyHour = p.HappyHour,
+                IsRecommended = p.IsRecommended,
+                CategoryName = c.CategoryName,
+                RestaurantName = p.Restaurant?.RestaurantName
+            }).ToList()
+        }).ToList();
+    } 
 }

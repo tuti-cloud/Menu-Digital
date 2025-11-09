@@ -3,6 +3,7 @@
 using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 public class RestaurantRepository : IRestaurantRepository
@@ -49,7 +50,7 @@ public class RestaurantRepository : IRestaurantRepository
         Restaurant? restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
         if (restaurant is not null)
         {
-            restaurant.Name = updatedRestaurant.Name;
+            restaurant.RestaurantName = updatedRestaurant.RestaurantName;
             restaurant.Address = updatedRestaurant.Address;
             restaurant.PhoneNumber = updatedRestaurant.PhoneNumber;
             restaurant.Email = updatedRestaurant.Email;
@@ -70,8 +71,21 @@ public class RestaurantRepository : IRestaurantRepository
     public Restaurant GetByName(string name)
     {
         return _context.Restaurants
-            .FirstOrDefault(r => r.Name.ToLower() == name.ToLower());
+            .FirstOrDefault(r => r.RestaurantName.ToLower() == name.ToLower());
+    }
+
+    public ICollection<Product> GetProductsByName(string productName)
+    {
+        if (string.IsNullOrWhiteSpace(productName))
+            return new List<Product>();
+
+        return _context.Products
+            .Include(p => p.Restaurant)
+            .Where(p => EF.Functions.Like(p.ProductName, $"%{productName}%"))
+            .ToList();
     }
 
 
 }
+
+

@@ -139,17 +139,27 @@ namespace Menu_Digital.Services.Implementation
             }).ToList();
         }
 
-        public ICollection<ProductDto> GetHappyHourByName(string restaurantName)
+        public ICollection<DiscountedProductDto> GetHappyHourByName(string restaurantName)
         {
             var restaurant = _restaurantRepository.GetByName(restaurantName);
-            if (restaurant == null)
-                throw new Exception("Restaurant not found");
+            if (restaurant == null) throw new Exception("Restaurant not found");
 
-            return _productRepository.GetHappyHour(restaurant.RestaurantId)
-                .Select(MapToDto)
+            return _productRepository.GetHappyHour(restaurant.RestaurantId)   // solo HH = true
+                .Select(p =>
+                {
+                    // Si querés mostrar precio con descuento solo cuando DiscountPercentage>0:
+                    var rate = p.DiscountPercentage > 1 ? p.DiscountPercentage / 100.0 : p.DiscountPercentage;
+                    var final = p.Price * (decimal)(1 - rate);
+
+                    return new DiscountedProductDto
+                    {
+                        Name = p.ProductName,
+                        DiscountPercentage = p.DiscountPercentage,
+                        FinalPrice = Math.Round(final, 2)
+                    };
+                })
                 .ToList();
         }
-
         public ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName)
         {
             var restaurant = _restaurantRepository.GetByName(restaurantName);
@@ -251,5 +261,7 @@ namespace Menu_Digital.Services.Implementation
 
             return dtos;
             }
-        }
+
+ 
+    }
     }

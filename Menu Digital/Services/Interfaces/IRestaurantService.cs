@@ -12,6 +12,7 @@ namespace Menu_Digital.Services.Interfaces
         RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId);
         public void AutoDelete(CredentialRequestDto dto);
         public Restaurant? Authenticate(string email, string password);
+        ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName);
 
     }
 }

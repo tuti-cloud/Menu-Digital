@@ -3,6 +3,7 @@
 using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 public class RestaurantRepository : IRestaurantRepository
@@ -73,8 +74,18 @@ public class RestaurantRepository : IRestaurantRepository
             .FirstOrDefault(r => r.RestaurantName.ToLower() == name.ToLower());
     }
 
-    public ICollection<Restaurant> GetByProductName(string Name)
+    public ICollection<Product> GetProductsByName(string productName)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(productName))
+            return new List<Product>();
+
+        return _context.Products
+            .Include(p => p.Restaurant)
+            .Where(p => EF.Functions.Like(p.ProductName, $"%{productName}%"))
+            .ToList();
     }
+
+
 }
+
+

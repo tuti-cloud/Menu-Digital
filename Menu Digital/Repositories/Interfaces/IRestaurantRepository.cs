@@ -12,7 +12,7 @@ namespace Menu_Digital.Repositories.Interfaces
         public Restaurant? GetByEmail(string email); //para autenticación
         Restaurant GetByName(string name);
 
-        ICollection<Restaurant> GetByProductName(string Name);
+        public ICollection<Product> GetProductsByName(string ProductName);
 
     }
 }

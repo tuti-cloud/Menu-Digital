@@ -150,14 +150,30 @@ namespace Menu_Digital.Services.Implementation
                 .ToList();
         }
 
-        public ICollection<ProductDto> GetDiscountedByName(string restaurantName)
+        public ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName)
         {
             var restaurant = _restaurantRepository.GetByName(restaurantName);
             if (restaurant == null)
                 throw new Exception("Restaurant not found");
 
+            // Traigo los productos con descuento y proyecto solo lo necesario
             return _productRepository.GetDiscounted(restaurant.RestaurantId)
-                .Select(MapToDto)
+                .Select(p =>
+                {
+                    // entiende ambas representaciones del descuento, e lo =:
+                    //  • 0–1  (0.5 = 50%)
+                    //  • 0–100 (50 = 50%)
+                    var rate = p.DiscountPercentage > 1 ? p.DiscountPercentage / 100.0 : p.DiscountPercentage;
+
+                    var finalPrice = p.Price * (decimal)(1 - rate);
+
+                    return new DiscountedProductDto
+                    {
+                        Name = p.Name,
+                        DiscountPercentage = p.DiscountPercentage,
+                        FinalPrice = Math.Round(finalPrice, 2) // redondeo a 2 decimales
+                    };
+                })
                 .ToList();
         }
 

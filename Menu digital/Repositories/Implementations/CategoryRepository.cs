@@ -52,7 +52,7 @@ public class CategoryRepository : ICategoryRepository
         Category? category = _context.Categories.SingleOrDefault(c => c.CategoryId == categoryId);
         if (category is not null)
         {
-            category.Name = updatedCategory.Name;        
+            category.CategoryName = updatedCategory.CategoryName;        
 
             _context.SaveChanges();
         }

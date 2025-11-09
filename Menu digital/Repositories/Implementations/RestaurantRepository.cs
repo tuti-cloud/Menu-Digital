@@ -49,7 +49,7 @@ public class RestaurantRepository : IRestaurantRepository
         Restaurant? restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
         if (restaurant is not null)
         {
-            restaurant.Name = updatedRestaurant.Name;
+            restaurant.RestaurantName = updatedRestaurant.RestaurantName;
             restaurant.Address = updatedRestaurant.Address;
             restaurant.PhoneNumber = updatedRestaurant.PhoneNumber;
             restaurant.Email = updatedRestaurant.Email;
@@ -70,8 +70,11 @@ public class RestaurantRepository : IRestaurantRepository
     public Restaurant GetByName(string name)
     {
         return _context.Restaurants
-            .FirstOrDefault(r => r.Name.ToLower() == name.ToLower());
+            .FirstOrDefault(r => r.RestaurantName.ToLower() == name.ToLower());
     }
 
-
+    public ICollection<Restaurant> GetByProductName(string Name)
+    {
+        throw new NotImplementedException();
+    }
 }

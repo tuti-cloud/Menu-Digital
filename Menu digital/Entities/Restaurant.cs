@@ -20,7 +20,7 @@ namespace Menu_Digital.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RestaurantId { get; set; }
-        public string Name { get; set; }
+        public string RestaurantName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }

@@ -1,6 +1,8 @@
 ﻿using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
+using Menu_Digital.Models.DTOs.Responses;
+using Menu_Digital.Repositories.Implementations;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
 using System;
@@ -70,17 +72,40 @@ namespace Menu_Digital.Services.Implementation
             return MapToDto(product);
         }
 
-        public ICollection<ProductDto> GetHappyHourByName(string restaurantName)
+        // Obtener todos los productos marcados como recomendados (favoritos)
+        public IEnumerable<RecommendedProductDto> GetRecommended()
         {
-            var restaurant = _restaurantRepository.GetByName(restaurantName);
-            if (restaurant == null)
-                throw new Exception("Restaurant not found");
-
-            return _productRepository.GetHappyHour(restaurant.RestaurantId)
-                .Select(MapToDto)
+            return _productRepository.GetRecommended()
+                .Select(p => new RecommendedProductDto
+                {
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    Price = p.Price
+                })
                 .ToList();
         }
 
+        public ICollection<DiscountedProductDto> GetHappyHourByName(string restaurantName)
+        {
+            var restaurant = _restaurantRepository.GetByName(restaurantName);
+            if (restaurant == null) throw new Exception("Restaurant not found");
+
+            return _productRepository.GetHappyHour(restaurant.RestaurantId)   // solo HH = true
+                .Select(p =>
+                {
+                    // Si querés mostrar precio con descuento solo cuando DiscountPercentage>0:
+                    var rate = p.DiscountPercentage > 1 ? p.DiscountPercentage / 100.0 : p.DiscountPercentage;
+                    var final = p.Price * (decimal)(1 - rate);
+
+                    return new DiscountedProductDto
+                    {
+                        Name = p.ProductName,
+                        DiscountPercentage = p.DiscountPercentage,
+                        FinalPrice = Math.Round(final, 2)
+                    };
+                })
+                .ToList();
+        }
         public ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName)
         {
             var restaurant = _restaurantRepository.GetByName(restaurantName);
@@ -161,20 +186,23 @@ namespace Menu_Digital.Services.Implementation
                 .ToList();
         }
 
-        // ✅ Helper centralizado
-        private static ProductDto MapToDto(Product p)
-        {
-            return new ProductDto
-            {
-                Name = p.ProductName,
-                Description = p.Description,
-                Price = p.Price,
-                DiscountPercentage = p.DiscountPercentage,
-                HappyHour = p.HappyHour,
-                IsRecommended = p.IsRecommended,
-                CategoryName = p.Category?.CategoryName,
-                RestaurantName = p.Restaurant?.RestaurantName
-            };
-        }
+            var dtos = updatedProducts //mapea dtos
+                .Select(p => new ProductDto
+                {
+                    Name = p.ProductName,
+                    Description = p.Description,
+                    Price = p.Price,
+                    DiscountPercentage = p.DiscountPercentage,
+                    HappyHour = p.HappyHour,
+                    IsRecommended = p.IsRecommended,
+                    CategoryName = p.Category?.CategoryName,
+                    RestaurantName = p.Restaurant?.RestaurantName
+                })
+                .ToList();
+
+            return dtos;
+            }
+
+ 
     }
-}
+    }

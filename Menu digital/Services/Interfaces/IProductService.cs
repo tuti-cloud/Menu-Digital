@@ -13,9 +13,8 @@ namespace Menu_Digital.Services.Interfaces
         ProductDto Create(CreateAndUpdateProductDto productDto);
         ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId);
         public void Delete(int productId);
-        IEnumerable<RecommendedProductDto> GetRecommended();
-
-        ICollection<ProductDto> GetHappyHourByName(string restaurantName);
+        ICollection<ProductDto> GetRecommended();
+        ICollection<DiscountedProductDto> GetHappyHourByName(string restaurantName);
         ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName);
 
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);

@@ -10,6 +10,7 @@ namespace Menu_Digital.Services.Interfaces
         ProductDto GetProductByIdForRestaurant(int restaurantId, int productId);
 
         ProductDto GetProductById(int id);
+        ProductDto GetProductByName(string Name);
         ProductDto Create(CreateAndUpdateProductDto productDto);
         ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId);
         public void Delete(int productId);

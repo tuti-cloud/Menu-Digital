@@ -6,6 +6,7 @@ namespace Menu_Digital.Repositories.Interfaces
     {
         ICollection<Product> GetAll();
         Product? GetProductById(int id);
+        Product? GetProductByName(string Name);
         Product Create(Product product);
         void Update(Product updatedProduct, int productId);
         void Delete(int id);

@@ -1,68 +1,73 @@
-﻿namespace Menu_Digital.Repositories.Implementations;
-
-using Menu_Digital.Entities;
+﻿using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
-public class CategoryRepository : ICategoryRepository
+namespace Menu_Digital.Repositories.Implementations
 {
-    private readonly MenuDigitalContext _context; //contexto de la base de datos    
-    public CategoryRepository(MenuDigitalContext context)
+    public class CategoryRepository : ICategoryRepository
     {
-        _context = context;
-    }
+        private readonly MenuDigitalContext _context;
 
-    public Category Create(Category category)
-    {
-        Category newcategory = _context.Categories.Add(category).Entity;
-        _context.SaveChanges();
-        return newcategory;
-    }
-
-    public void Delete(int id)
-    {
-        var CategoryToDelete = _context.Categories.FirstOrDefault(c => c.CategoryId == id); //busca la category con el id especificado
-        if (CategoryToDelete != null)
+        public CategoryRepository(MenuDigitalContext context)
         {
-            _context.Categories.Remove(CategoryToDelete); //si la encuentra, la elimina de la lista
+            _context = context;
+        }
+
+        // 🔹 Obtener todas las categorías globales
+        public List<Category> GetAll()
+        {
+            return _context.Categories.ToList();
+        }
+
+        // 🔹 Obtener una categoría por ID
+        public Category? GetCategoryById(int id)
+        {
+            return _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+        }
+
+        // 🔹 Verificar si ya existe una categoría con el mismo nombre
+        public bool ExistsByName(string name)
+        {
+            return _context.Categories.Any(c => c.CategoryName == name);
+        }
+
+        // 🔹 Agregar nueva categoría global
+        public void Add(Category category)
+        {
+            _context.Categories.Add(category);
+        }
+
+        // 🔹 Actualizar nombre de categoría
+        public void Update(Category updatedCategory, int categoryId)
+        {
+            var existing = _context.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (existing != null)
+            {
+                existing.CategoryName = updatedCategory.CategoryName;
+            }
+        }
+
+        // 🔹 Eliminar categoría por ID
+        public void Delete(int id)
+        {
+            var category = _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+            }
+        }
+
+        // 🔹 Guardar cambios
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
-    }
-
-    public Category? GetCategoryById(int id)
-    {
-        return _context.Categories.FirstOrDefault(c => c.CategoryId == id);
-    }
-
-    public ICollection<Category> GetAll()
-    {
-        return _context.Categories.ToList();
-    }
-    ICollection<Category> ICategoryRepository.GetByrestaurantId(int restaurantId)
-    {
-        return _context.Categories
-        .Where(c => c.RestaurantId == restaurantId)
-        .ToList();
-    }
-
-    public void Update(Category updatedCategory, int categoryId)
-    {
-        Category? category = _context.Categories.SingleOrDefault(c => c.CategoryId == categoryId);
-        if (category is not null)
-        {
-            category.CategoryName = updatedCategory.CategoryName;        
-
-            _context.SaveChanges();
-        }
-    } // SOLO NAME?
-
-    public void AssignProducts(int categoryId, IEnumerable<int> productIds)
-    {
-        throw new NotImplementedException();
     }
 }
+
 
 
 

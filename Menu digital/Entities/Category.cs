@@ -8,11 +8,18 @@ namespace Menu_Digital.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
+
+        [Required]
         public string CategoryName { get; set; }
 
-        [ForeignKey("RestaurantId")]
-        public Restaurant Restaurant { get; set; } //una categoria se relaciona con varios restaurantes.
-        public int RestaurantId { get; set; }
-        public ICollection<Product> Products { get; set; } // una categoria tiene varios productos.
+        //  grup0o cometné la relación con Restaurant
+        // porque las categorías son globales.
+        // public int RestaurantId { get; set; }
+        // public Restaurant Restaurant { get; set; }
+
+        // Relación: una categoría tiene varios productos
+        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
+
+

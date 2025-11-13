@@ -62,6 +62,14 @@ namespace Menu_Digital.Services.Implementation
 
             return MapToDto(product);
         }
+        public ProductDto GetProductByName(string Name)
+        {
+            var product = _productRepository.GetProductByName(Name);
+            if (product == null)
+                throw new Exception("no existe ese producto");
+
+            return MapToDto(product);
+        }
 
         public ProductDto GetProductByIdForRestaurant(int restaurantId, int productId)
         {

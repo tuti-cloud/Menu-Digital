@@ -81,6 +81,23 @@ public class RestaurantService : IRestaurantService
         return restaurants;
     }
 
+    public RestaurantDto GetByRestaurantName(string restaurantName)
+    {
+
+        var restaurant = _restaurantRepository.GetByName(restaurantName);
+        if (restaurant == null)
+        {
+            throw new Exception("restaurat not found");
+        }
+
+        return new RestaurantDto
+        {
+            Name = restaurant.  RestaurantName,
+            Address = restaurant.Address,
+            Email = restaurant.Email,
+            PhoneNumber = restaurant.PhoneNumber,
+        };
+    }
     public RestaurantDto GetByRestaurantId(int restaurantId)
     {
 
@@ -92,7 +109,7 @@ public class RestaurantService : IRestaurantService
 
         return new RestaurantDto
         {
-            Name = restaurant.  RestaurantName,
+            Name = restaurant.RestaurantName,
             Address = restaurant.Address,
             Email = restaurant.Email,
             PhoneNumber = restaurant.PhoneNumber,
@@ -161,6 +178,11 @@ public class RestaurantService : IRestaurantService
                 RestaurantName = p.Restaurant?.RestaurantName
             }).ToList()
         }).ToList();
+    }
+
+    bool IRestaurantService.AutoDelete(CredentialRequestDto dto)
+    {
+        throw new NotImplementedException();
     }
 }
 

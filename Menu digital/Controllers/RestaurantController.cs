@@ -21,6 +21,7 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var restaurants = _restaurantService.GetAllRestaurants();
@@ -31,6 +32,7 @@ namespace Menu_Digital.Controllers
         }
 
         [HttpGet("{restaurantId}")]
+        [AllowAnonymous]
         public IActionResult GetRestaurantId(int restaurantId)
         {
             var restaurant = _restaurantService.GetByRestaurantId(restaurantId);
@@ -43,7 +45,7 @@ namespace Menu_Digital.Controllers
             return Ok(restaurant);
         }
 
-        [AllowAnonymous]
+       
         [HttpPost]
         public IActionResult CreateRestaurant(CreateAndUpdateRestaurantDto createRestaurantDto)
         {

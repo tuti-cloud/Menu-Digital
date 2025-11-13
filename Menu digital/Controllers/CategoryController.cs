@@ -1,72 +1,82 @@
 ﻿using Menu_Digital.Models.DTOs.Requests;
-using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Menu_Digital.Controllers
 {
-    [Route("api/categories")]
     [ApiController]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
-        private ICategoryService _categoryService;
+        private readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
-        
+
+        // 🔹 GET api/categories
         [HttpGet]
         public IActionResult GetAll()
         {
             var categories = _categoryService.GetAllCategories();
-            if (!categories.Any())
+
+            if (categories == null || !categories.Any())
                 return NoContent();
 
             return Ok(categories);
         }
 
-        [HttpGet("{categoryId}")]
-        public IActionResult GetCategoryId(int categoryId)
+        // 🔹 GET api/categories/{categoryId}
+        [HttpGet("{categoryId:int}")]
+        public IActionResult GetCategoryById(int categoryId)
         {
-            var category = _categoryService.GetCategoryById(categoryId);
-
-            if (category == null)
+            try
             {
-                return NotFound($"Categoría con ID {categoryId} no fue encontrado.");
+                var category = _categoryService.GetCategoryById(categoryId);
+                return Ok(category);
             }
-
-            return Ok(category);
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"No se encontró la categoría con ID {categoryId}.");
+            }
         }
 
+        // 🔹 POST api/categories
         [HttpPost]
-        public IActionResult CreateCategory(CreateAndUpdateCategoryDto createCategorytDto)
+        public IActionResult CreateCategory([FromBody] CreateAndUpdateCategoryDto dto)
         {
-            var newCategory = _categoryService.Create(createCategorytDto);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var newCategory = _categoryService.Create(dto);
 
             if (newCategory == null)
-            {
-                return BadRequest("No se pudo crear la categoría.");
-            }
+                return Conflict("Ya existe una categoría con ese nombre.");
 
-            return Ok(newCategory);
+            return CreatedAtAction(nameof(GetCategoryById), new { categoryId = newCategory.CategoryId }, newCategory);
         }
 
-        [HttpDelete]
-        [Route("{categoryId}")]
-        public IActionResult DeleteCategory(int categoryId)
+        // 🔹 PUT api/categories/{categoryId}
+        [HttpPut("{categoryId:int}")]
+        public IActionResult UpdateCategory([FromBody] CreateAndUpdateCategoryDto dto, int categoryId)
         {
-            _categoryService.Delete(categoryId);
-            return NoContent();
-        }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        [HttpPut]
-        [Route("{categoryId}")]
-        public IActionResult UpdateCategory(CreateAndUpdateCategoryDto dto, int categoryId)
-        {
             var updatedCategory = _categoryService.Update(dto, categoryId);
             return Ok(updatedCategory);
         }
+
+        // 🔹 DELETE api/categories/{categoryId}
+        [HttpDelete("{categoryId:int}")]
+        public IActionResult DeleteCategory(int categoryId)
+        {
+            _categoryService.Delete(categoryId);
+            return Ok($"Categoría con ID {categoryId} eliminada correctamente.");
+        }
     }
 }
+
 

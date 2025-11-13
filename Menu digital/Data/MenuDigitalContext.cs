@@ -33,7 +33,7 @@ namespace MenuDigital.Data
             { 
                 CategoryId= 1,
                 CategoryName= "Bebidas",
-                RestaurantId= 1,
+                
                 };
             Product Coca = new Product()
             {

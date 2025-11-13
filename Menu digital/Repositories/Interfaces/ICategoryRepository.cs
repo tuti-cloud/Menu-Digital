@@ -1,16 +1,16 @@
 ﻿using Menu_Digital.Entities;
+using System.Collections.Generic;
 
 namespace Menu_Digital.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
-        ICollection<Category> GetAll();
+        List<Category> GetAll();
         Category? GetCategoryById(int id);
-        Category Create(Category category);
+        bool ExistsByName(string name);
+        void Add(Category category);
         void Update(Category updatedCategory, int categoryId);
         void Delete(int id);
-        public ICollection<Category> GetByrestaurantId(int restaurantId); //obtener categorias por restaurante
-        void AssignProducts(int categoryId, IEnumerable<int> productIds);
-
+        void SaveChanges();
     }
 }

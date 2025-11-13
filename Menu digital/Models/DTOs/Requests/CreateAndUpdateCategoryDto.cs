@@ -3,9 +3,9 @@
         public class CreateAndUpdateCategoryDto
         {
             public string Name { get; set; }
-            public int RestaurantId { get; set; }
+        //    public int RestaurantId { get; set; }
 
-        public List<int> ProductIds { get; set; } = new();
+        //public List<int> ProductIds { get; set; } = new();
         }
  
 }

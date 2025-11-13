@@ -1,96 +1,113 @@
 ﻿using Menu_Digital.Models.DTOs.Requests;
-using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Linq;
 
 namespace Menu_Digital.Controllers
 {
-
-    [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize] // 👈 mantenido tal cual
     public class RestaurantController : ControllerBase
     {
-        private IRestaurantService _restaurantService;
+        private readonly IRestaurantService _restaurantService;
+
         public RestaurantController(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
         }
 
+        // 🔹 GET api/restaurant
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var restaurants = _restaurantService.GetAllRestaurants();
-            if (!restaurants.Any())
+            if (restaurants == null || !restaurants.Any())
                 return NoContent();
 
             return Ok(restaurants);
         }
 
+        // 🔹 GET api/restaurant/{restaurantName}
         [HttpGet("{restaurantName}")]
-        public IActionResult GetRestaurantId(string restaurantName)
+        [AllowAnonymous]
+        public IActionResult GetByName(string restaurantName)
         {
             var restaurant = _restaurantService.GetByRestaurantName(restaurantName);
-
             if (restaurant == null)
-            {
-                return NotFound($"Restaurante con Nombre {restaurantName} no fue encontrado.");
-            }
+                return NotFound($"Restaurante con nombre '{restaurantName}' no fue encontrado.");
 
             return Ok(restaurant);
         }
 
-        [AllowAnonymous]
+        // 🔹 POST api/restaurant  (se permite anónimo para registro)
+        
         [HttpPost]
-        public IActionResult CreateRestaurant(CreateAndUpdateRestaurantDto createRestaurantDto)
+        public IActionResult CreateRestaurant([FromBody] CreateAndUpdateRestaurantDto dto)
         {
-            var newRestaurant = _restaurantService.Create(createRestaurantDto);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var newRestaurant = _restaurantService.Create(dto);
             if (newRestaurant == null)
-            {
                 return BadRequest("No se pudo crear el restaurante.");
-            }
 
-            return Ok(newRestaurant);
+            return CreatedAtAction(nameof(GetByName), new { restaurantName = newRestaurant.Name }, newRestaurant);
         }
 
-        [HttpDelete]
-        [Route("{email}/{passwordHash}")]
+        // 🔹 DELETE api/restaurant/{email}/{passwordHash}
+        [HttpDelete("{email}/{passwordHash}")]
         public IActionResult DeleteRestaurant(string email, string passwordHash)
         {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(passwordHash))
+                return BadRequest("Faltan credenciales.");
+
             var dto = new CredentialRequestDto
             {
                 Email = email,
                 PasswordHash = passwordHash
             };
 
-            _restaurantService.AutoDelete(dto);
-            return Ok("Eliminado con éxito");
+            var deleted = _restaurantService.AutoDelete(dto);
+
+            if (!deleted)
+                return Unauthorized("Credenciales inválidas o restaurante no encontrado.");
+
+            return Ok("Restaurante eliminado con éxito.");
         }
 
-        [HttpPut]
-        [Route("{restaurantId}")]
-        public IActionResult UpdateRestaurant(CreateAndUpdateRestaurantDto dto, int restaurantId)
+        // 🔹 PUT api/restaurant/{restaurantId}
+        [HttpPut("{restaurantId:int}")]
+        public IActionResult UpdateRestaurant([FromBody] CreateAndUpdateRestaurantDto dto, int restaurantId)
         {
-            var updatedRestaurant = _restaurantService.Update(dto, restaurantId);
-            return Ok(updatedRestaurant);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var updated = _restaurantService.Update(dto, restaurantId);
+            if (updated == null)
+                return NotFound($"No se encontró restaurante con ID {restaurantId}.");
+
+            return Ok(updated);
         }
 
+        // 🔹 GET api/restaurant/product/{productName}
         [HttpGet("product/{productName}")]
         [AllowAnonymous]
         public IActionResult GetRestaurantsByProductName([FromRoute] string productName)
         {
-            var result = _restaurantService.GetRestaurantsByProductName(productName);
+            if (string.IsNullOrWhiteSpace(productName))
+                return BadRequest("Debe ingresar un nombre de producto.");
 
-            if (result == null || result.Count == 0)
+            var result = _restaurantService.GetRestaurantsByProductName(productName);
+            if (result == null || !result.Any())
                 return NotFound("No se encontraron restaurantes con ese producto.");
 
             return Ok(result);
         }
 
+        // 🔹 GET api/restaurant/{restaurantId}/menu
         [HttpGet("{restaurantId:int}/menu")]
         [AllowAnonymous]
         public IActionResult GetMenu(int restaurantId)

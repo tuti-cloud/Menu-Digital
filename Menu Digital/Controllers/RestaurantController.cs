@@ -56,14 +56,9 @@ namespace Menu_Digital.Controllers
 
             return CreatedAtAction(nameof(GetByName), new { restaurantName = newRestaurant.Name }, newRestaurant);
         }
-
-        // 🔹 DELETE api/restaurant/{email}/{passwordHash}
         [HttpDelete("{email}/{passwordHash}")]
         public IActionResult DeleteRestaurant(string email, string passwordHash)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(passwordHash))
-                return BadRequest("Faltan credenciales.");
-
             var dto = new CredentialRequestDto
             {
                 Email = email,
@@ -73,10 +68,11 @@ namespace Menu_Digital.Controllers
             var deleted = _restaurantService.AutoDelete(dto);
 
             if (!deleted)
-                return Unauthorized("Credenciales inválidas o restaurante no encontrado.");
+                return Unauthorized("Credenciales inválidas o el restaurante no existe.");
 
             return Ok("Restaurante eliminado con éxito.");
         }
+
 
         // 🔹 PUT api/restaurant/{restaurantId}
         [HttpPut("{restaurantId:int}")]
@@ -106,19 +102,40 @@ namespace Menu_Digital.Controllers
 
             return Ok(result);
         }
-
-        // 🔹 GET api/restaurant/{restaurantId}/menu
-        [HttpGet("{restaurantId:int}/menu")]
+        [HttpGet("{restaurantName}/menu")]
         [AllowAnonymous]
-        public IActionResult GetMenu(int restaurantId)
+        public IActionResult GetMenuByName(string restaurantName)
         {
-            var menu = _restaurantService.GetMenuByRestaurantId(restaurantId);
+            if (string.IsNullOrWhiteSpace(restaurantName))
+                return BadRequest("Debe indicar el nombre del restaurante.");
 
-            if (menu == null || !menu.Any())
-                return NotFound(new { message = "No se encontraron categorías o productos para este restaurante." });
+            var menu = _restaurantService.GetMenuByRestaurantName(restaurantName);
+
+            if (menu == null || !menu.Any() || menu.All(m => m.Products == null || m.Products.Count == 0))
+                return NotFound(new { message = $"No se encontraron productos para '{restaurantName}'." });
 
             return Ok(menu);
         }
+
+        // RestaurantController.cs
+        [HttpGet("{restaurantName}/category/{categoryName}/products")]
+        [AllowAnonymous]
+        public IActionResult GetProductsByRestaurantAndCategory(string restaurantName, string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(restaurantName) || string.IsNullOrWhiteSpace(categoryName))
+                return BadRequest("Debe indicar el nombre del restaurante y de la categoría.");
+
+            var products = _restaurantService.GetProductsByRestaurantAndCategory(restaurantName, categoryName);
+
+            if (products == null || products.Count == 0)
+                return NotFound($"No se encontraron productos de '{categoryName}' en '{restaurantName}'.");
+
+            return Ok(products);
+        }
+
+
+
+
     }
 }
 

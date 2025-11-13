@@ -1,6 +1,7 @@
 ﻿using Menu_Digital.Entities;
 using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Models.DTOs.Responses;
+using Menu_Digital.Models.DTOs.Responses;
 using Menu_Digital.Repositories.Implementations;
 using Menu_Digital.Repositories.Interfaces;
 using Menu_Digital.Services.Interfaces;
@@ -119,24 +120,16 @@ namespace Menu_Digital.Services.Implementation
         }
 
         // Obtener todos los productos marcados como recomendados (favoritos)
-        public ICollection<ProductDto> GetRecommended()
+        public IEnumerable<RecommendedProductDto> GetRecommended()
         {
-            var products = _productRepository
-                .GetAll()
-                .Where(p => p.IsRecommended)
+            return _productRepository.GetRecommended()
+                .Select(p => new RecommendedProductDto
+                {
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    Price = p.Price
+                })
                 .ToList();
-
-            return products.Select(p => new ProductDto
-            {
-                Name = p.ProductName,
-                Description = p.Description,
-                Price = p.Price,
-                DiscountPercentage = p.DiscountPercentage,
-                HappyHour = p.HappyHour,
-                IsRecommended = p.IsRecommended,
-                CategoryName = p.Category?.CategoryName,
-                RestaurantName = p.Restaurant?.RestaurantName
-            }).ToList();
         }
 
         public ICollection<DiscountedProductDto> GetHappyHourByName(string restaurantName)

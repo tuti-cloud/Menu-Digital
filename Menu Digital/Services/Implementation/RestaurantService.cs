@@ -179,5 +179,10 @@ public class RestaurantService : IRestaurantService
             }).ToList()
         }).ToList();
     }
+
+    bool IRestaurantService.AutoDelete(CredentialRequestDto dto)
+    {
+        throw new NotImplementedException();
+    }
 }
 

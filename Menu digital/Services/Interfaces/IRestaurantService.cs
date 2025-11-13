@@ -7,14 +7,18 @@ namespace Menu_Digital.Services.Interfaces
     public interface IRestaurantService
     {
         List<RestaurantDto> GetAllRestaurants();
-        RestaurantDto GetByRestaurantId(int restaurantId);
+        RestaurantDto GetByRestaurantName(string restaurantName);
         RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto);
         RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId);
-        public void AutoDelete(CredentialRequestDto dto);
-        public Restaurant? Authenticate(string email, string password);
+
+        // ⬇️ Cambiado: ahora devuelve bool
+        bool AutoDelete(CredentialRequestDto dto);
+
+        Restaurant? Authenticate(string email, string password);
+
         ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName);
 
         List<MenuDto> GetMenuByRestaurantId(int restaurantId);
-
     }
 }
+

@@ -89,7 +89,7 @@ public class RestaurantRepository : IRestaurantRepository
     {
         return _context.Categories
             .Include(c => c.Products)
-            .Where(c => c.RestaurantId == restaurantId)
+            //.Where(c => c.RestaurantId == restaurantId)
             .ToList();
     }
 

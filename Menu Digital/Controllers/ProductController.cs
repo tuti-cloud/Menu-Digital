@@ -29,7 +29,7 @@ namespace Menu_Digital.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{productId}")]
+        [HttpGet("id/{productId}")]
         [AllowAnonymous]
         public IActionResult GetProductId(int productId)
         {
@@ -42,6 +42,20 @@ namespace Menu_Digital.Controllers
 
             return Ok(product);
         }
+
+            [HttpGet("Name/{ProductName}")]
+            [AllowAnonymous]
+            public IActionResult GetProductByNmae(string ProductName)
+            {
+                var product = _productService.GetProductByName(ProductName);
+
+                if (product == null)
+                {
+                    return NotFound($"Producto con Nombre {ProductName} no fue encontrado.");
+                }
+
+                return Ok(product);
+            }
         [HttpGet("recommended")]
         [AllowAnonymous]
         public IActionResult GetRecommended()

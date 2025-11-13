@@ -22,6 +22,8 @@ namespace Menu_Digital.Repositories.Interfaces
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);
         public void UpdateDiscount(int productId, int discountPercentage);
         ICollection<Product> IncreasePricesByRestaurant(int restaurantId, decimal percentage);
+        
+
 
     }
 }

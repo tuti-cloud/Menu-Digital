@@ -1,36 +1,27 @@
-﻿namespace Menu_Digital.Repositories.Implementations;
-
-using Menu_Digital.Entities;
+﻿using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 public class RestaurantRepository : IRestaurantRepository
 {
+    private readonly MenuDigitalContext _context;
 
-    private readonly MenuDigitalContext _context; //contexto de la base de datos    
     public RestaurantRepository(MenuDigitalContext context)
     {
         _context = context;
     }
+
     public Restaurant Create(Restaurant restaurant)
     {
-        Restaurant newrestaurant = _context.Restaurants.Add(restaurant).Entity;
+        var newrestaurant = _context.Restaurants.Add(restaurant).Entity;
         _context.SaveChanges();
         return newrestaurant;
     }
 
-    public void Delete(int id)
-    {
-        var RestaurantToDelete = _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id); //busca el restaurante con el id especificado
-        if (RestaurantToDelete != null)
-        {
-            _context.Restaurants.Remove(RestaurantToDelete); //si lo encuentra, lo elimina de la lista
-            _context.SaveChanges();
-        }
-    }
-    ICollection<Restaurant> IRestaurantRepository.GetAll()
+    public ICollection<Restaurant> GetAll()
     {
         return _context.Restaurants.ToList();
     }
@@ -47,7 +38,7 @@ public class RestaurantRepository : IRestaurantRepository
 
     public void Update(Restaurant updatedRestaurant, int restaurantId)
     {
-        Restaurant? restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
+        var restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
         if (restaurant is not null)
         {
             restaurant.RestaurantName = updatedRestaurant.RestaurantName;
@@ -59,15 +50,36 @@ public class RestaurantRepository : IRestaurantRepository
             _context.SaveChanges();
         }
     }
-    public void DeleteByEmail(string email)
+
+    // ✅ Implementación correcta y estable del DeleteByEmail
+    public bool DeleteByEmail(string email)
     {
         var entity = GetByEmail(email);
-        if (entity != null)
+        if (entity == null)
+            return false;
+
+        using var tx = _context.Database.BeginTransaction();
+        try
         {
+            // 1️⃣ Eliminar los productos del restaurante (evita error FK)
+            var products = _context.Products.Where(p => p.RestaurantId == entity.RestaurantId);
+            _context.Products.RemoveRange(products);
+
+            // 2️⃣ Eliminar el restaurante
             _context.Restaurants.Remove(entity);
+
+            // 3️⃣ Guardar y confirmar
             _context.SaveChanges();
+            tx.Commit();
+            return true;
+        }
+        catch
+        {
+            tx.Rollback();
+            return false;
         }
     }
+
     public Restaurant GetByName(string name)
     {
         return _context.Restaurants
@@ -85,15 +97,55 @@ public class RestaurantRepository : IRestaurantRepository
             .ToList();
     }
 
-    public ICollection<Category> GetMenuByRestaurantId(int restaurantId)
+    public ICollection<Category> GetMenuByRestaurantName(string restaurantName)
     {
-        return _context.Categories
-            .Include(c => c.Products)
-            //.Where(c => c.RestaurantId == restaurantId)
+        if (string.IsNullOrWhiteSpace(restaurantName))
+            return new List<Category>();
+
+        restaurantName = restaurantName.Trim().ToLower();
+
+        var restaurant = _context.Restaurants
+            .FirstOrDefault(r => r.RestaurantName.ToLower() == restaurantName);
+
+        if (restaurant == null)
+            return new List<Category>();
+
+        var categories = _context.Categories
+            .AsNoTracking()
+            .OrderBy(c => c.CategoryId)
+            .ToList();
+
+        var products = _context.Products
+            .AsNoTracking()
+            .Where(p => p.RestaurantId == restaurant.RestaurantId)
+            .ToList();
+
+        foreach (var c in categories)
+            c.Products = products.Where(p => p.CategoryId == c.CategoryId).ToList();
+
+        return categories;
+    }
+
+    // RestaurantRepository.cs
+    public ICollection<Product> GetProductsByRestaurantAndCategory(string restaurantName, string categoryName)
+    {
+        if (string.IsNullOrWhiteSpace(restaurantName) || string.IsNullOrWhiteSpace(categoryName))
+            return new List<Product>();
+
+        restaurantName = restaurantName.Trim().ToLower();
+        categoryName = categoryName.Trim().ToLower();
+
+        return _context.Products
+            .Include(p => p.Restaurant)
+            .Include(p => p.Category)
+            .Where(p =>
+                p.Restaurant.RestaurantName.ToLower() == restaurantName &&
+                p.Category.CategoryName.ToLower() == categoryName
+            )
             .ToList();
     }
 
-
 }
+
 
 

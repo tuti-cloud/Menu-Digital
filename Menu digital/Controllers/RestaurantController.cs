@@ -30,14 +30,14 @@ namespace Menu_Digital.Controllers
             return Ok(restaurants);
         }
 
-        [HttpGet("{restaurantId}")]
-        public IActionResult GetRestaurantId(int restaurantId)
+        [HttpGet("{restaurantName}")]
+        public IActionResult GetRestaurantId(string restaurantName)
         {
-            var restaurant = _restaurantService.GetByRestaurantId(restaurantId);
+            var restaurant = _restaurantService.GetByRestaurantName(restaurantName);
 
             if (restaurant == null)
             {
-                return NotFound($"Restaurante con ID {restaurantId} no fue encontrado.");
+                return NotFound($"Restaurante con Nombre {restaurantName} no fue encontrado.");
             }
 
             return Ok(restaurant);

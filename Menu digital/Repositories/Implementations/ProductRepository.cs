@@ -37,7 +37,11 @@ public class ProductRepository : IProductRepository
     {
         return _context.Products.FirstOrDefault(p => p.ProductId == id);
     }
-     public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended)
+    public Product? GetProductByName(string Name)
+    {
+        return _context.Products.FirstOrDefault(p => p.ProductName == Name);
+    }
+    public ICollection<Product> GetRecommendedProducts(int restaurantId, bool isRecommended)
     {
         return _context.Products // Acceder a la colección de Productos
         .Where(p => p.RestaurantId == restaurantId) // Filtrar por el ID del restaurante

@@ -98,10 +98,11 @@ public class ProductRepository : IProductRepository
     {
         return _context.Products
             .Where(p => p.IsRecommended)
-            .ToList(); // List<Product> cumple ICollection<Product>
+            .ToList();
     }
 
-   
+
+
     public ICollection<Product> GetHappyHour(int restaurantId)
     {
         return _context.Products

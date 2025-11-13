@@ -13,7 +13,6 @@ namespace Menu_Digital.Services.Interfaces
         ProductDto Create(CreateAndUpdateProductDto productDto);
         ProductDto Update(CreateAndUpdateProductDto updatedProductDto, int productId);
         public void Delete(int productId);
-        // ICollection<ProductDto> GetRecommended();
         IEnumerable<RecommendedProductDto> GetRecommended();
         ICollection<DiscountedProductDto> GetHappyHourByName(string restaurantName);
         ICollection<DiscountedProductDto> GetDiscountedByName(string restaurantName);
@@ -21,6 +20,7 @@ namespace Menu_Digital.Services.Interfaces
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);
         public void UpdateDiscount(int productId, int discountPercentage);
         List<ProductDto> IncreasePrices(int restaurantId, decimal percentage);
+       
 
     }
 }

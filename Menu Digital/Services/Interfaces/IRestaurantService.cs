@@ -7,7 +7,7 @@ namespace Menu_Digital.Services.Interfaces
     public interface IRestaurantService
     {
         List<RestaurantDto> GetAllRestaurants();
-        RestaurantDto GetByRestaurantId(int restaurantId);
+        RestaurantDto GetByRestaurantName(string restaurantName);
         RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto);
         RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId);
         public void AutoDelete(CredentialRequestDto dto);

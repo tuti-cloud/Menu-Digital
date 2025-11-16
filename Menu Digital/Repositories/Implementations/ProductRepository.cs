@@ -3,6 +3,7 @@
 using Menu_Digital.Entities;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 public class ProductRepository : IProductRepository
@@ -31,7 +32,11 @@ public class ProductRepository : IProductRepository
     }
     public ICollection<Product> GetAll()
     {
-        return _context.Products.ToList();
+        // ❗ CORRECCIÓN: Usar .Include() para cargar las relaciones Category y Restaurant
+        return _context.Products
+            .Include(p => p.Category)    // Carga los datos de la categoría asociada
+            .Include(p => p.Restaurant) // Carga los datos del restaurante asociado
+            .ToList(); // Ahora el mapper tendrá los datos de las relaciones.
     }
     public Product? GetProductById(int id)
     {
@@ -147,7 +152,7 @@ public class ProductRepository : IProductRepository
     public ICollection<Product> IncreasePricesByRestaurant(int restaurantId, decimal percentage)
     {
         var products = _context.Products  // cargar productos del restaurante
-            .Where(p => p.ProductId == restaurantId)
+            .Where(p => p.RestaurantId == restaurantId)
             .ToList();
 
         if (!products.Any())
@@ -165,6 +170,12 @@ public class ProductRepository : IProductRepository
         _context.SaveChanges();
 
         return products;
+    }
+    public bool GetHappyHourStatus(int restaurantId)
+    {
+        return _context.Products
+            .Where(p => p.RestaurantId == restaurantId)
+            .Any(p => p.HappyHour == true);
     }
 
 }

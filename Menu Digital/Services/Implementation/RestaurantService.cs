@@ -33,7 +33,8 @@ public class RestaurantService : IRestaurantService
     public RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto)
     {
         Restaurant restaurant = new Restaurant()
-        {
+        
+        {   
             RestaurantName = restaurantDto.Name,
             Address = restaurantDto.Address,
             PhoneNumber = restaurantDto.PhoneNumber,
@@ -44,11 +45,13 @@ public class RestaurantService : IRestaurantService
         var newRestaurant = _restaurantRepository.Create(restaurant);
         return new RestaurantDto
         {
+            Id = newRestaurant.RestaurantId,
             Name = newRestaurant.RestaurantName,
             Address = newRestaurant.Address,
             Email = newRestaurant.Email,
             PhoneNumber = newRestaurant.PhoneNumber,
         };
+
     }
 
     public bool AutoDelete(CredentialRequestDto dto)
@@ -68,18 +71,18 @@ public class RestaurantService : IRestaurantService
 
     public List<RestaurantDto> GetAllRestaurants()
     {
-        var restaurants = _restaurantRepository.GetAll()
-      .Select(u => new RestaurantDto
-      {
-          Name = u.RestaurantName,
-          Address = u.Address,
-          Email = u.Email,
-          PhoneNumber = u.PhoneNumber,
-      })
-      .ToList();
-
-        return restaurants;
+        return _restaurantRepository.GetAll()
+            .Select(u => new RestaurantDto
+            {
+                Id = u.RestaurantId,  
+                Name = u.RestaurantName,
+                Address = u.Address,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+            })
+            .ToList();
     }
+
 
     public RestaurantDto GetByRestaurantName(string restaurantName)
     {
@@ -92,11 +95,13 @@ public class RestaurantService : IRestaurantService
 
         return new RestaurantDto
         {
-            Name = restaurant.  RestaurantName,
+            Id = restaurant.RestaurantId,    
+            Name = restaurant.RestaurantName,
             Address = restaurant.Address,
             Email = restaurant.Email,
-            PhoneNumber = restaurant.PhoneNumber,
+            PhoneNumber = restaurant.PhoneNumber
         };
+
     }
     public RestaurantDto GetByRestaurantId(int restaurantId)
     {
@@ -109,11 +114,13 @@ public class RestaurantService : IRestaurantService
 
         return new RestaurantDto
         {
+            Id = restaurant.RestaurantId,   
             Name = restaurant.RestaurantName,
             Address = restaurant.Address,
             Email = restaurant.Email,
             PhoneNumber = restaurant.PhoneNumber,
         };
+
     }
 
     public RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId)

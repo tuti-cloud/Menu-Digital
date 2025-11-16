@@ -47,12 +47,18 @@ namespace Menu_Digital.Services.Implementation
             _productRepository.Delete(productId);
         }
 
+
         public List<ProductDto> GetAllProducts()
         {
-            return _productRepository.GetAll()
+            // 1. Obtener los productos del repositorio (que ya incluye Category y Restaurant)
+            var products = _productRepository.GetAll();
+
+            // 2. Mapear la lista usando el helper robusto
+            return products
                 .Select(MapToDto)
                 .ToList();
         }
+
 
         public ProductDto GetProductById(int id)
         {
@@ -159,6 +165,10 @@ namespace Menu_Digital.Services.Implementation
 
             _productRepository.UpdateDiscount(productId, discountPercentage);
         }
+        public bool GetHappyHourStatus(int restaurantId)
+        {
+            return _productRepository.GetHappyHourStatus(restaurantId);
+        }
 
 
         public IEnumerable<RecommendedProductDto> GetRecommended()
@@ -196,7 +206,7 @@ namespace Menu_Digital.Services.Implementation
             return dtos;
 
             }
-            // Helper
+        // Helper
         private static ProductDto MapToDto(Product p) => new ProductDto
         {
             Name = p.ProductName,
@@ -205,11 +215,18 @@ namespace Menu_Digital.Services.Implementation
             DiscountPercentage = p.DiscountPercentage,
             HappyHour = p.HappyHour,
             IsRecommended = p.IsRecommended,
-            CategoryName = p.Category?.CategoryName,
-            RestaurantName = p.Restaurant?.RestaurantName
+
+            // 🛑 CORRECCIÓN: Usamos el operador de coalescencia nula '??' 
+            // para manejar el caso en que la relación sea nula (aunque el Include debería haber funcionado)
+            CategoryName = p.Category?.CategoryName ?? "Sin Categoría",
+            RestaurantName = p.Restaurant?.RestaurantName ?? "Sin Restaurante",
+
+            // Asumiendo que el DTO tiene el ID del producto
+            Id = p.ProductId
         };
+
     }
 
- 
-    }
+
+}
     

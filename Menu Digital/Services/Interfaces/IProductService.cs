@@ -21,8 +21,7 @@ namespace Menu_Digital.Services.Interfaces
         public int SetHappyHourForRestaurant(int restaurantId, bool enabled);
         public void UpdateDiscount(int productId, int discountPercentage);
         List<ProductDto> IncreasePrices(int restaurantId, decimal percentage);
-
-       
+        bool GetHappyHourStatus(int restaurantId);
 
     }
 }

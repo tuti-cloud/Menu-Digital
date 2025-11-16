@@ -24,8 +24,11 @@ namespace Menu_Digital.Controllers
         public IActionResult GetAll()
         {
             var restaurants = _restaurantService.GetAllRestaurants();
+            //if (restaurants == null || !restaurants.Any())
+            //    return NoContent();
             if (restaurants == null || !restaurants.Any())
-                return NoContent();
+                return Ok(new List<RestaurantDto>());
+
 
             return Ok(restaurants);
         }

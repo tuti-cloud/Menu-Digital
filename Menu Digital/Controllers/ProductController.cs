@@ -1,9 +1,8 @@
 ﻿using Menu_Digital.Models.DTOs.Requests;
-using Menu_Digital.Services.Implementation;
 using Menu_Digital.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Menu_Digital.Controllers
 {
@@ -12,12 +11,14 @@ namespace Menu_Digital.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
+
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
 
+        // GET: api/products
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetAll()
@@ -29,6 +30,7 @@ namespace Menu_Digital.Controllers
             return Ok(products);
         }
 
+        // GET: api/products/id/5
         [HttpGet("id/{productId}")]
         [AllowAnonymous]
         public IActionResult GetProductId(int productId)
@@ -36,26 +38,25 @@ namespace Menu_Digital.Controllers
             var product = _productService.GetProductById(productId);
 
             if (product == null)
-            {
                 return NotFound($"Producto con ID {productId} no fue encontrado.");
-            }
 
             return Ok(product);
         }
 
-            [HttpGet("Name/{ProductName}")]
-            [AllowAnonymous]
-            public IActionResult GetProductByNmae(string ProductName)
-            {
-                var product = _productService.GetProductByName(ProductName);
+        // GET: api/products/name/Coca
+        [HttpGet("name/{productName}")]
+        [AllowAnonymous]
+        public IActionResult GetProductByName(string productName)
+        {
+            var product = _productService.GetProductByName(productName);
 
-                if (product == null)
-                {
-                    return NotFound($"Producto con Nombre {ProductName} no fue encontrado.");
-                }
+            if (product == null)
+                return NotFound($"Producto con nombre {productName} no fue encontrado.");
 
-                return Ok(product);
-            }
+            return Ok(product);
+        }
+
+        // GET: api/products/recommended
         [HttpGet("recommended")]
         [AllowAnonymous]
         public IActionResult GetRecommended()
@@ -64,38 +65,35 @@ namespace Menu_Digital.Controllers
             return Ok(result);
         }
 
-
-
-
-
+        // POST: api/products
         [HttpPost]
-        public IActionResult CreateProduct(CreateAndUpdateProductDto createProductDto)
+        public IActionResult CreateProduct(CreateAndUpdateProductDto dto)
         {
-            var newProduct = _productService.Create(createProductDto);
+            var newProduct = _productService.Create(dto);
 
             if (newProduct == null)
-            {
                 return BadRequest("No se pudo crear el producto.");
-            }
 
             return Ok(newProduct);
         }
 
-        [HttpDelete]
-        [Route("{productId}")]
+        // DELETE: api/products/5
+        [HttpDelete("{productId}")]
         public IActionResult DeleteProduct(int productId)
         {
             _productService.Delete(productId);
             return NoContent();
         }
 
-        [HttpPut]
-        [Route("{productId}")]
+        // PUT: api/products/5
+        [HttpPut("{productId}")]
         public IActionResult UpdateProduct(CreateAndUpdateProductDto dto, int productId)
         {
             var updatedProduct = _productService.Update(dto, productId);
             return Ok(updatedProduct);
         }
+
+        // GET: api/products/sushiclub/happyhour
         [HttpGet("{restaurantName}/happyhour")]
         [AllowAnonymous]
         public IActionResult GetHappyHour(string restaurantName)
@@ -104,6 +102,7 @@ namespace Menu_Digital.Controllers
             return Ok(result);
         }
 
+        // GET: api/products/sushiclub/discounted
         [HttpGet("{restaurantName}/discounted")]
         [AllowAnonymous]
         public IActionResult GetDiscounted(string restaurantName)
@@ -112,10 +111,7 @@ namespace Menu_Digital.Controllers
             return Ok(result);
         }
 
-
-
-        // PUT: api/products/{restaurantId}/happyhour/{enabled}
-        // Habilita/Deshabilita el Happy Hour de TODOS los productos del restaurante
+        // PUT: api/products/5/happyhour/true
         [HttpPut("{restaurantId}/happyhour/{enabled}")]
         public IActionResult SetHappyHourForRestaurant(int restaurantId, bool enabled)
         {
@@ -123,6 +119,7 @@ namespace Menu_Digital.Controllers
             return Ok(new { affected = count, happyHourEnabled = enabled });
         }
 
+        // PUT: api/products/5/discount/20
         [HttpPut("{productId}/discount/{percentage}")]
         public IActionResult UpdateDiscount(int productId, int percentage)
         {
@@ -130,7 +127,7 @@ namespace Menu_Digital.Controllers
             return Ok("Discount updated successfully");
         }
 
-
+        // PUT: api/products/increase-prices/5?percentage=10
         [HttpPut("increase-prices/{restaurantId}")]
         public IActionResult IncreasePrices(int restaurantId, [FromQuery] decimal percentage)
         {
@@ -152,11 +149,20 @@ namespace Menu_Digital.Controllers
             }
             catch (Exception ex)
             {
-                // Para producción podrías loguear el error y devolver un mensaje más genérico.
                 return StatusCode(500, $"Error interno: {ex.Message}");
             }
-
         }
-    }
+        // GET: api/products/{restaurantId}/happyhour-status
+        [HttpGet("{restaurantId}/happyhour-status")]
+        
+        public IActionResult GetHappyHourStatus(int restaurantId)
+        {
+            var enabled = _productService.GetHappyHourStatus(restaurantId);
 
+            return Ok(new { happyHourEnabled = enabled });
+        }
+
+
+    }
 }
+

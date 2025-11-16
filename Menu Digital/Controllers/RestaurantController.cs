@@ -77,18 +77,24 @@ namespace Menu_Digital.Controllers
         }
 
 
-        // 🔹 PUT api/restaurant/{restaurantId}
-        [HttpPut("{restaurantId:int}")]
-        public IActionResult UpdateRestaurant([FromBody] CreateAndUpdateRestaurantDto dto, int restaurantId)
+        [HttpPut("{email}/{passwordHash}")]
+        public IActionResult UpdateRestaurant(string email, string passwordHash, [FromBody] CreateAndUpdateRestaurantDto updatedData)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (updatedData == null)
+                return BadRequest("Debe enviar los datos a actualizar.");
 
-            var updated = _restaurantService.Update(dto, restaurantId);
-            if (updated == null)
-                return NotFound($"No se encontró restaurante con ID {restaurantId}.");
+            var dto = new CredentialRequestDto
+            {
+                Email = email,
+                PasswordHash = passwordHash
+            };
 
-            return Ok(updated);
+            var updated = _restaurantService.AutoUpdate(dto, updatedData);
+
+            if (!updated)
+                return Unauthorized("Credenciales inválidas o el restaurante no existe.");
+
+            return Ok("Restaurante actualizado con éxito.");
         }
 
         // 🔹 GET api/restaurant/product/{productName}

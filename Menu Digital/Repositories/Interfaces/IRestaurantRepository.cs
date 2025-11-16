@@ -1,4 +1,5 @@
 ﻿using Menu_Digital.Entities;
+using Menu_Digital.Models.DTOs.Requests;
 using System.Collections.Generic;
 
 namespace Menu_Digital.Repositories.Interfaces
@@ -8,7 +9,7 @@ namespace Menu_Digital.Repositories.Interfaces
         ICollection<Restaurant> GetAll();
         Restaurant? GetRestaurantById(int id);
         Restaurant Create(Restaurant restaurant);
-        void Update(Restaurant updatedRestaurant, int restaurantId);
+        bool UpdateByEmail(string email, CreateAndUpdateRestaurantDto updatedData);
 
         // ⬇️ Ahora devuelve true si se eliminó, false si no existe o falló.
         bool DeleteByEmail(string email);
@@ -23,6 +24,7 @@ namespace Menu_Digital.Repositories.Interfaces
         // IRestaurantRepository.cs
         ICollection<Product> GetProductsByRestaurantAndCategory(string restaurantName, string categoryName);
         ICollection<Category> GetMenuByRestaurantName(string restaurantName);
+
 
     }
 }

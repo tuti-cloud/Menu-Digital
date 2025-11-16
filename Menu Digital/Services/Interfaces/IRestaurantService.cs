@@ -10,7 +10,7 @@ namespace Menu_Digital.Services.Interfaces
         List<RestaurantDto> GetAllRestaurants();
         RestaurantDto GetByRestaurantName(string restaurantName);
         RestaurantDto Create(CreateAndUpdateRestaurantDto restaurantDto);
-        RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId);
+        bool AutoUpdate(CredentialRequestDto dto, CreateAndUpdateRestaurantDto updatedData);
 
         // ⬇️ devuelve true si se eliminó, false si credenciales inválidas o no existe
         bool AutoDelete(CredentialRequestDto dto);

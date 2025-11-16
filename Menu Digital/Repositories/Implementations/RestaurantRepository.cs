@@ -1,4 +1,5 @@
 ﻿using Menu_Digital.Entities;
+using Menu_Digital.Models.DTOs.Requests;
 using Menu_Digital.Repositories.Interfaces;
 using MenuDigital.Data;
 using Microsoft.EntityFrameworkCore;
@@ -36,18 +37,29 @@ public class RestaurantRepository : IRestaurantRepository
         return _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id);
     }
 
-    public void Update(Restaurant updatedRestaurant, int restaurantId)
+    public bool UpdateByEmail(string email, CreateAndUpdateRestaurantDto updatedData)
     {
-        var restaurant = _context.Restaurants.SingleOrDefault(r => r.RestaurantId == restaurantId);
-        if (restaurant is not null)
-        {
-            restaurant.RestaurantName = updatedRestaurant.RestaurantName;
-            restaurant.Address = updatedRestaurant.Address;
-            restaurant.PhoneNumber = updatedRestaurant.PhoneNumber;
-            restaurant.Email = updatedRestaurant.Email;
-            restaurant.PasswordHash = updatedRestaurant.PasswordHash;
+        var entity = GetByEmail(email);
+        if (entity == null)
+            return false;
 
+        try
+        {
+
+            entity.RestaurantName = updatedData.RestaurantName ?? entity.RestaurantName;
+            entity.Address = updatedData.Address ?? entity.Address;
+            entity.PhoneNumber = updatedData.PhoneNumber ?? entity.PhoneNumber;
+            entity.Email = updatedData.Email ?? entity.Email;
+            entity.PasswordHash = updatedData.PasswordHash ?? entity.PasswordHash;
+
+            _context.Restaurants.Update(entity);
             _context.SaveChanges();
+
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 

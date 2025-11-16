@@ -35,11 +35,11 @@ public class RestaurantService : IRestaurantService
         Restaurant restaurant = new Restaurant()
         
         {   
-            RestaurantName = restaurantDto.Name,
+            RestaurantName = restaurantDto.RestaurantName,
             Address = restaurantDto.Address,
             PhoneNumber = restaurantDto.PhoneNumber,
             Email = restaurantDto.Email,
-            PasswordHash = restaurantDto.Password,
+            PasswordHash = restaurantDto.PasswordHash,
         };
 
         var newRestaurant = _restaurantRepository.Create(restaurant);
@@ -122,33 +122,23 @@ public class RestaurantService : IRestaurantService
         };
 
     }
-
-    public RestaurantDto Update(CreateAndUpdateRestaurantDto updatedRestaurantDto, int restaurantId)
+    public bool AutoUpdate(CredentialRequestDto dto, CreateAndUpdateRestaurantDto updatedData)
     {
-        // Convertir DTO → Entidad
-        var updatedRestaurant = new Restaurant
-        {
-            RestaurantName = updatedRestaurantDto.Name,
-            Address = updatedRestaurantDto.Address,
-            PhoneNumber = updatedRestaurantDto.PhoneNumber,
-            Email = updatedRestaurantDto.Email,
-            PasswordHash = updatedRestaurantDto.Password
-        };
+        if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.PasswordHash))
+            return false;
 
-        _restaurantRepository.Update(updatedRestaurant, restaurantId);
+        var restaurant = _restaurantRepository.GetByEmail(dto.Email);
+        if (restaurant == null)
+            return false;
 
-        // Obtener la entidad actualizada (opcional si el repo la devuelve)
-        var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+        // validar contraseña
+        if (!string.Equals(restaurant.PasswordHash, dto.PasswordHash))
+            return false;
 
-        // Convertir Entidad → DTO
-        return new RestaurantDto
-        {
-            Name = restaurant.RestaurantName,
-            Address = restaurant.Address,
-            PhoneNumber = restaurant.PhoneNumber,
-            Email = restaurant.Email
-        };
+        // delegar al repo
+        return _restaurantRepository.UpdateByEmail(dto.Email, updatedData);
     }
+
 
     public ICollection<SearchProductByRestaurantDto> GetRestaurantsByProductName(string productName)
     {

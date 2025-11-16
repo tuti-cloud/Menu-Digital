@@ -1,4 +1,5 @@
 ﻿using Menu_Digital.Entities;
+using System.Collections.Generic;
 
 namespace Menu_Digital.Repositories.Interfaces
 {
@@ -8,11 +9,21 @@ namespace Menu_Digital.Repositories.Interfaces
         Restaurant? GetRestaurantById(int id);
         Restaurant Create(Restaurant restaurant);
         void Update(Restaurant updatedRestaurant, int restaurantId);
-        void DeleteByEmail(string email);
-        public Restaurant? GetByEmail(string email); //para autenticación
+
+        // ⬇️ Ahora devuelve true si se eliminó, false si no existe o falló.
+        bool DeleteByEmail(string email);
+
+        // Autenticación / búsquedas
+        Restaurant? GetByEmail(string email);
         Restaurant GetByName(string name);
-        public ICollection<Product> GetProductsByName(string ProductName);
-        ICollection<Category> GetMenuByRestaurantId(int restaurantId);
+
+        // Consultas auxiliares
+        ICollection<Product> GetProductsByName(string productName);
+        
+        // IRestaurantRepository.cs
+        ICollection<Product> GetProductsByRestaurantAndCategory(string restaurantName, string categoryName);
+        ICollection<Category> GetMenuByRestaurantName(string restaurantName);
 
     }
 }
+

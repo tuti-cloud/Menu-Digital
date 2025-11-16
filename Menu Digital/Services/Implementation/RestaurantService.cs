@@ -51,20 +51,20 @@ public class RestaurantService : IRestaurantService
         };
     }
 
-    public void AutoDelete(CredentialRequestDto dto)
-    { 
-            if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.PasswordHash))
-            throw new Exception("Email y contraseña son requeridos.");
+    public bool AutoDelete(CredentialRequestDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.PasswordHash))
+            return false;
 
-    var restaurant = _restaurantRepository.GetByEmail(dto.Email);
-        if (restaurant == null)
-            throw new Exception("Email o contraseña incorrectos.");
+        var restaurant = _restaurantRepository.GetByEmail(dto.Email);
+        if (restaurant == null) return false;
+        if (!string.Equals(restaurant.PasswordHash, dto.PasswordHash))
+            return false;
 
-        if (restaurant.PasswordHash != dto.PasswordHash)
-            throw new Exception("Email o contraseña incorrectos.");
-
-    _restaurantRepository.DeleteByEmail(dto.Email);
+        // Repo devuelve true si borró (ya lo ajustaste)
+        return _restaurantRepository.DeleteByEmail(dto.Email);
     }
+
 
     public List<RestaurantDto> GetAllRestaurants()
     {
@@ -157,17 +157,20 @@ public class RestaurantService : IRestaurantService
         }).ToList();
     }
 
-    public List<MenuDto> GetMenuByRestaurantId(int restaurantId)
+    public List<MenuDto> GetMenuByRestaurantName(string restaurantName)
     {
-        var categories = _restaurantRepository.GetMenuByRestaurantId(restaurantId);
-        if (categories == null || !categories.Any())
+        var categories = _restaurantRepository.GetMenuByRestaurantName(restaurantName);
+
+        if (categories == null || categories.Count == 0)
             return new List<MenuDto>();
 
         return categories.Select(c => new MenuDto
         {
+            CategoryId = c.CategoryId,
             CategoryName = c.CategoryName,
             Products = c.Products.Select(p => new ProductDto
             {
+                Id = p.ProductId,
                 Name = p.ProductName,
                 Description = p.Description,
                 Price = p.Price,
@@ -180,9 +183,21 @@ public class RestaurantService : IRestaurantService
         }).ToList();
     }
 
-    bool IRestaurantService.AutoDelete(CredentialRequestDto dto)
+    public List<RecommendedProductDto> GetProductsByRestaurantAndCategory(string restaurantName, string categoryName)
     {
-        throw new NotImplementedException();
+        var products = _restaurantRepository.GetProductsByRestaurantAndCategory(restaurantName, categoryName);
+
+        return products.Select(p => new RecommendedProductDto
+        {
+            ProductName = p.ProductName,
+            Description = p.Description,
+            Price = p.Price
+        }).ToList();
     }
+
+
+
+
+
 }
 
